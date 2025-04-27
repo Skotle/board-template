@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>게시판</title>
+</head>
+<body>
+  <h1>게시판</h1>
+
+  <input type="text" id="author" placeholder="닉네임"><br><br>
+  <input type="password" id="password" placeholder="비밀번호"><br><br>
+  <textarea id="content" rows="4" cols="50" placeholder="글을 입력하세요"></textarea><br><br>
+  <input type="file" id="image"><br><br>
+  <button onclick="submitPost()">게시하기</button>
+
+  <div id="posts"></div>
+
+  <script>
+    async function submitPost() {
+      const author = document.getElementById('author').value.trim();
+      const content = document.getElementById('content').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const imageInput = document.getElementById('image');
+
+      if (!author || !content || !password) {
+        return alert('작성자, 내용, 비밀번호를 모두 입력하세요.');
+      }
+
+      const formData = new FormData();
+      formData.append('author', author);
+      formData.append('content', content);
+      formData.append('password', password);
+      if (imageInput.files.length > 0) {
+        formData.append('image', imageInput.files[0]);
+      }
+
+      await fetch('/posts', {
+        method: 'POST',
+        body: formData
+      });
+
+      document.getElementById('author').value = '';
+      document.getElementById('content').value = '';
+      document.getElementById('password').value = '';
+      document.getElementById('image').value = '';
+      loadPosts();
+    }
+
+    async function loadPosts() {
+      const res = await fetch('/posts');
+      const data = await res.json();
+
+      const postsDiv = document.getElementById('posts');
+      postsDiv.innerHTML = '';
+      data.reverse().forEach(post => {
+        const time = new Date(post.timestamp).toLocaleString();
+        const div = document.createElement('div');
+        div.innerHTML = `
+          <strong>${post.author}</strong> <em>(${time})</em> [ID: ${post.id}]<br>
+          ${post.content}
+          ${post.imageUrl ? `<br><img src="${post.imageUrl}" width="200">` : ''}
+          <br><button onclick="deletePost('${post.id}')">삭제</button>
+          <hr>
+        `;
+        postsDiv.appendChild(div);
+      });
+    }
+
+    async function deletePost(id) {
+      const password = prompt("비밀번호를 입력하세요:");
+      if (!password) return;
+
+      const res = await fetch(`/posts/${id}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password })
+      });
+
+      if (res.status === 200) {
+        alert('삭제되었습니다.');
+        loadPosts();
+      } else if (res.status === 403) {
+        alert('비밀번호가 틀렸습니다.');
+      } else {
+        alert('삭제에 실패했습니다.');
+      }
+    }
+
+    loadPosts();
+  </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+[
+  {
+    "content": "테스트 1",
+    "author": "ㅇㅇ",
+    "timestamp": "2025-04-26T07:21:31.140Z"
+  },
+  {
+    "content": "테스트 2",
+    "author": "ㅇㅇ",
+    "timestamp": "2025-04-26T07:21:36.884Z"
+  },
+  {
+    "id": "m9xwa3ydmars4",
+    "author": "ㅇㅇ",
+    "content": "테스트 3",
+    "timestamp": "2025-04-26T07:24:14.341Z"
+  },
+  {
+    "id": "m9xwaazm5g1vt",
+    "author": "ㅇㅇ",
+    "content": "테스트 4",
+    "timestamp": "2025-04-26T07:24:23.458Z"
+  },
+  {
+    "id": "m9xwbagddovv8",
+    "author": "ㅇㅇ",
+    "content": "테스트 5",
+    "timestamp": "2025-04-26T07:25:09.421Z"
+  },
+  {
+    "id": "m9xwjcyxgzl15",
+    "author": "ㅇㅇ",
+    "content": "테스트 6",
+    "timestamp": "2025-04-26T07:31:25.929Z",
+    "imageUrl": "/uploads/428603963cb1eb57ff311be36b3d9716"
+  },
+  {
+    "id": "m9xwkxz9davnp",
+    "author": "ㅇㅇ",
+    "content": "테스트 7",
+    "password": "1234",
+    "timestamp": "2025-04-26T07:32:39.813Z",
+    "imageUrl": null
+  },
+  {
+    "id": "m9xwl6ihees4y",
+    "author": "ㅇㅇ",
+    "content": "테스트 8",
+    "timestamp": "2025-04-26T07:32:50.873Z",
+    "password": "1234",
+    "imageUrl": "/uploads/cd26d25bc6c68fe6392ebbae64c58891"
+  },
+  {
+    "id": "m9xwwoyktvdf9",
+    "author": "ㅇㅇ",
+    "content": "테스트 9",
+    "password": "1234",
+    "timestamp": "2025-04-26T07:41:47.996Z",
+    "imageUrl": null
+  }
+]
