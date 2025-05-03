@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>글 작성</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>새 글 작성</h1>
+    <form id="postForm" enctype="multipart/form-data">
+        <input type="text" name="author"placeholder="이름" required>
+        <input type="text" name="title" placeholder="제목" required>
+        <textarea type="text" name="content" placeholder="본문" required></textarea>
+        <input type="password" name="password"placeholder="비밀번호" required>
+        <input type="file" name="image">
+        <button type="submit">작성</button>
+      </form>
+      
+    <a class="back" href="index.html">← 목록으로</a>
+  </div>
+  <script src="write.js"></script>
+</body>
+</html>
