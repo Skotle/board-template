@@ -32,8 +32,10 @@ app.post('/posts', upload.single('image'), (req, res) => {
     title: req.body.title,
     content: req.body.content,
     password: req.body.password,
+    category: req.body.category,
     image: req.file ? `/uploads/${req.file.filename}` : null,
-    time: new Date().toLocaleString()
+    time: new Date().toLocaleString(),
+    id_check: req.body.sign,  // uid 또는 false 저장됨
   };
   posts.push(newPost);
   fs.writeFileSync(DATA_FILE, JSON.stringify(posts, null, 2));
@@ -50,24 +52,49 @@ app.get('/posts/:id', (req, res) => {
 
 // 게시물 삭제
 app.post('/delete/:id', (req, res) => {
-  const { id } = req.params;
-  const { password } = req.body;
+  let posts = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
+  const index = posts.findIndex(p => p.id === req.params.id);
+  if (index === -1) return res.sendStatus(404);
 
-  const posts = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
-  const index = posts.findIndex(p => p.id === id);
-  console.log(req.body);
-  console.log(req.params);
-  if (index === -1) return res.status(404).send('게시글 없음');
+  const post = posts[index];
+  const { uid, password } = req.body;
 
-  if (posts[index].password !== password) {
-    return res.status(403).send('비밀번호 불일치');
+  const isOwner = post.id_check && uid && post.id_check === uid;
+  const isPasswordValid = post.password === password;
+
+  if (isOwner || isPasswordValid) {
+    posts.splice(index, 1);
+    fs.writeFileSync(DATA_FILE, JSON.stringify(posts, null, 2));
+    res.sendStatus(200);
+  } else {
+    res.sendStatus(403); // 권한 없음
   }
-
-  posts.splice(index, 1);
-  fs.writeFileSync(DATA_FILE, JSON.stringify(posts, null, 2));
-  res.sendStatus(200);
 });
 
+// 로그인 처리
+app.post('/login', (req, res) => {
+  const { userID, password } = req.body;
+  const users = JSON.parse(fs.readFileSync('user-info.json', 'utf-8'));
+  const user = users.find(u => u.userID === userID);
+
+  if (!user) {
+    return res.status(401).json({ message: '존재하지 않는 아이디입니다.' });
+  }
+
+  if (user.password !== password) {
+    return res.status(401).json({ message: '비밀번호가 틀렸습니다.' });
+  }
+
+  const accessToken = uuidv4();
+  const refreshToken = uuidv4();
+
+  res.json({
+    accessToken,
+    refreshToken,
+    username: user.username,
+    signID: user.uid  // uid 반환 (고유 식별자)
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`서버 실행 중: http://localhost:${PORT}`);

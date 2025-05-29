@@ -2,15 +2,54 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>게시판</title>
+  <title>임시게시판</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h1>게시판</h1>
-    <a href="write.html" class="write-btn">글쓰기</a>
-    <ul id="postList"></ul>
+    <header class="auth-area">
+      <span id="welcome" class="welcome-text" style="display:none;"></span>
+      <a href="login.html" id="loginLink" class="auth-link">로그인</a>
+      <button id="logoutBtn" class="auth-btn" style="display:none;">로그아웃</button>
+    </header>
+
+    <h1 class="board-title">임시게시판</h1>
+    <div class="top-bar">
+      <a href="write.html" class="write-btn">글쓰기</a>
+    </div>
+
+    <ul id="postList" class="post-list">
+      <!-- 게시글 항목이 JS로 동적으로 삽입됩니다 -->
+    </ul>
   </div>
+
+  <script>
+    const token = localStorage.getItem("accessToken");
+    const username = localStorage.getItem("username");
+    const loginLink = document.getElementById("loginLink");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const welcome = document.getElementById("welcome");
+
+    if (token && username) {
+      loginLink.style.display = "none";
+      logoutBtn.style.display = "inline-block";
+      welcome.style.display = "inline-block";
+      welcome.textContent = `환영합니다, ${username}님`;
+    } else {
+      loginLink.style.display = "inline-block";
+      logoutBtn.style.display = "none";
+      welcome.style.display = "none";
+    }
+
+    logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("username");
+      alert("로그아웃 되었습니다.");
+      window.location.reload();
+    });
+  </script>
+
   <script src="index.js"></script>
 </body>
 </html>

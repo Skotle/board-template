@@ -8,15 +8,32 @@
 <body>
   <div class="container">
     <h1>새 글 작성</h1>
-    <form id="postForm" enctype="multipart/form-data">
-        <input type="text" name="author"placeholder="이름" required>
-        <input type="text" name="title" placeholder="제목" required>
-        <textarea type="text" name="content" placeholder="본문" required></textarea>
-        <input type="password" name="password"placeholder="비밀번호" required>
-        <input type="file" name="image">
-        <button type="submit">작성</button>
-      </form>
-      
+    <select id="category" name="category" required>
+  <option value="">-- 탭 선택 --</option>
+  <option value="default">일반</option>
+  <option value="quest">질문</option>
+  <option value="info">정보</option>
+  <option value="notice">공지</option>
+</select>
+
+    <form id="postForm">
+      <div class="signch">
+        <input
+  type="text"
+  id="author"
+  name="author"
+  class="auth-only"
+  placeholder="닉네임"
+  style="width: 50px; display: none;"><br><br>
+      </div>
+      <input type="text" id="title" placeholder="제목" required><br><br>
+      <textarea id="content" placeholder="본문" required style="height: 100px; width: 500px;"></textarea><br><br>
+      <input type="file" id="image"><br><br>
+      <input type="password" id="password" placeholder="삭제 비밀번호" class="non-auth-only" required><br><br>
+      <button type="submit">작성 완료</button>
+    </form>
+
+
     <a class="back" href="index.html">← 목록으로</a>
   </div>
   <script src="write.js"></script>
