@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const posts = await res.json();
 
     postList.innerHTML = ""; // 기존 목록 초기화
-
+    
     posts.reverse().forEach(post => {
       const li = document.createElement("li");
       li.className = "post-item";
@@ -20,6 +20,19 @@ document.addEventListener("DOMContentLoaded", async () => {
           ${post.author} • ${post.time}
         </div>
       `;
+      if (post.comments){
+        li.innerHTML = `
+        <div class="post-title">
+          <a href="post.html?id=${post.id}">
+            [${getCategoryLabel(post.category)}] ${post.title}
+          </a>
+          <a href="" style="color:gray; font-size:medium">[${post.comments.length}]</a>
+        </div>
+        <div class="post-meta">
+          ${post.author} • ${post.time}
+        </div>
+      `;
+      }
       postList.appendChild(li);
     });
   } catch (err) {

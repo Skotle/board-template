@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>IP 앞자리 변수 선언</title>
+</head>
+<body>
+  <p>현재IP: <span id="ip"></span></p>
+
+  <script>
+    fetch('https://api.ipify.org?format=json')
+      .then(response => response.json())
+      .then(data => {
+        const fullIp = data.ip;                     // 전체 IP 저장
+        const ipParts = fullIp.split('.');          // 점(.) 기준으로 분리
+        const frontPart = ipParts.slice(0, 2).join('.');  // 앞 두 세그먼트 합침
+        
+        // 변수로 선언한 앞자리 IP 출력
+        document.getElementById('ip').textContent = frontPart;
+        
+        // 필요하면 콘솔에도 출력 가능
+        console.log('전체 IP:', fullIp);
+        console.log('앞부분 IP:', frontPart);
+      })
+      .catch(error => {
+        console.error('IP를 가져오는 데 실패했습니다:', error);
+      });
+  </script>
+</body>
+</html>

@@ -2,17 +2,11 @@
   {
     "userID": "skotle989",
     "username": "슨일",
-    "password":"a09ajdud21",
-    "uid": "a4f9c3e1-09b1-4a62-8d91-bc8d3eea83af"
+    "password": "a09ajdud21"
   },
   {
-    "userID": "admin",
-    "username": "관리자",
-    "password":"admin123"
-  },
-  {
-    "userID": "admin2",
-    "username": "관리자",
-    "password":"admin123"
+    "userID": "ofscotland",
+    "username": "Skotle",
+    "password": "a09ajdud21"
   }
 ]

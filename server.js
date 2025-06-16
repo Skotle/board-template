@@ -71,6 +71,50 @@ app.post('/delete/:id', (req, res) => {
   }
 });
 
+
+
+// 댓글 폼 [[[중요]]]
+app.post('/posts/:id/comment', (req, res) => {
+  const { id } = req.params;
+  const { author, content, password = "", uid = "" } = req.body;
+  const time = new Date().toLocaleString('ko-KR');
+
+  const posts = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
+  const post = posts.find(p => p.id === id);
+
+  if (!post) return res.status(404).send("게시글이 존재하지 않습니다.");
+  if (!post.comments) post.comments = [];
+
+  const comment = {
+    id: uuidv4(),
+    author,
+    content,
+    time,
+    password,
+    uid
+  };
+
+  post.comments.push(comment);
+
+  fs.writeFileSync(DATA_FILE, JSON.stringify(posts, null, 2));
+  res.sendStatus(200);
+});
+// 댓글 조회
+app.get('/posts/:id/comments', (req, res) => {
+  const { id } = req.params;
+  const posts = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
+  const post = posts.find(p => p.id === id);
+
+  if (!post) return res.status(404).send("게시글이 존재하지 않습니다.");
+
+  res.json(post.comments || []);
+});
+
+
+
+
+
+
 // 로그인 처리
 app.post('/login', (req, res) => {
   const { userID, password } = req.body;
@@ -95,6 +139,34 @@ app.post('/login', (req, res) => {
     signID: user.uid  // uid 반환 (고유 식별자)
   });
 });
+
+const filePath = path.join(__dirname, 'user-info.json');
+
+app.use(express.json());
+app.use(express.static('public')); // 클라이언트 파일 위치
+
+app.get('/users', (req, res) => {
+  const data = fs.readFileSync(filePath, 'utf8');
+  res.json(JSON.parse(data));
+});
+
+app.post('/add-user', (req, res) => {
+  const { userID, username, password, email } = req.body;
+
+  let users = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+  const isDuplicate = users.some(u => u.userID === userID || u.username === username);
+  if (isDuplicate) {
+    return res.status(400).json({ message: '중복된 userID 또는 username입니다.' });
+  }
+
+  const newUser = { userID, username, password };
+  users.push(newUser);
+
+  fs.writeFileSync(filePath, JSON.stringify(users, null, 2));
+  res.json({ message: '사용자가 추가되었습니다.', user: newUser });
+});
+
 
 app.listen(PORT, () => {
   console.log(`서버 실행 중: http://localhost:${PORT}`);

@@ -1,3 +1,30 @@
+// 전역 변수로 선언 (초기값 null)
+let ipFront;
+
+async function getIpFrontPart() {
+  try {
+    const response = await fetch('https://api.ipify.org?format=json');
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+    const data = await response.json();
+    const ipParts = data.ip.split('.');
+    return ipParts.slice(0, 2).join('.');
+  } catch (error) {
+    console.error('IP를 가져오는 데 실패했습니다:', error);
+    return null;
+  }
+}
+
+// 전역 변수에 할당
+getIpFrontPart().then(front => {
+  ipFront = front;
+  if (ipFront) {
+    console.log('IP 앞부분 할당 완료:', ipFront);
+  } else {
+    console.log('IP를 가져올 수 없습니다.');
+  }
+});
+
 document.addEventListener("DOMContentLoaded", function () {
   const token = localStorage.getItem("accessToken");
   const authOnlyElements = document.querySelectorAll(".auth-only");
@@ -21,6 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
     authOnlyElements.forEach(el => el.style.display = "inline-block");
   }
 });
+
 
 
 document.getElementById('postForm').addEventListener('submit', async (e) => {
@@ -54,8 +82,7 @@ document.getElementById('postForm').addEventListener('submit', async (e) => {
       passwordInput.focus();
       return;
     }
-
-    formData.append("author", nickname);
+    formData.append("author", nickname+"("+ipFront+")");
     formData.append("password", passwordInput.value);
   }
 
