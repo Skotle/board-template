@@ -168,23 +168,29 @@ document.getElementById('deleteForm').addEventListener('submit', async (e) => {
 document.addEventListener("click", async (e) => {
   if (e.target.classList.contains("delete-comment-btn")) {
     const commentId = e.target.dataset.commentId;
+    const postId = new URLSearchParams(location.search).get('id');
+
     if (!confirm("정말로 댓글을 삭제하시겠습니까?")) return;
 
     try {
-      const res = await fetch(`/comments/${commentId}/delete`, {
+      const res = await fetch(`/posts/:${postId}}/comment/:${commentId}`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`
-        }
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          uid: localStorage.getItem("userId"),
+          password: "" // 비회원용 비밀번호 입력 필드가 있다면 여기에 넣기
+        })
       });
 
       if (res.ok) {
         alert("댓글이 삭제되었습니다.");
-        loadComments();
+        loadComments(); // 댓글 목록 다시 불러오기
       } else {
         const msg = await res.text();
         alert("삭제 실패: " + msg);
+        console.log("삭제 실패: " + msg);
       }
     } catch (err) {
       console.error("삭제 요청 실패:", err);
@@ -192,6 +198,8 @@ document.addEventListener("click", async (e) => {
     }
   }
 });
+
+
 
 
 

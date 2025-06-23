@@ -143,5 +143,33 @@
         "uid": null
       }
     ]
+  },
+  {
+    "id": "88ac5608-0b90-4eff-81b2-d0bd600d353c",
+    "author": "슨일",
+    "title": "댓글 테스트",
+    "content": "본문1",
+    "category": "default",
+    "image": null,
+    "time": "2025. 6. 21. 오후 3:24:08",
+    "id_check": "슨일",
+    "comments": [
+      {
+        "id": "206b6036-6b12-4705-9a70-8346c7c9f0c1",
+        "author": "슨일",
+        "content": "응ㅇㅇㅇㅇ",
+        "time": "2025. 6. 21. 오후 3:24:18",
+        "password": "",
+        "uid": "슨일"
+      },
+      {
+        "id": "250e7c28-eaae-4ba1-a56a-1cc61a2be73b",
+        "author": "슨일",
+        "content": "음경",
+        "time": "2025. 6. 21. 오후 4:25:51",
+        "password": "",
+        "uid": "슨일"
+      }
+    ]
   }
 ]

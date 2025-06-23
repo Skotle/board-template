@@ -99,20 +99,49 @@ app.post('/posts/:id/comment', (req, res) => {
   fs.writeFileSync(DATA_FILE, JSON.stringify(posts, null, 2));
   res.sendStatus(200);
 });
-// 댓글 조회
+
+
+// 댓글 조회(단일형)
 app.get('/posts/:id/comments', (req, res) => {
   const { id } = req.params;
   const posts = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
   const post = posts.find(p => p.id === id);
+  const commentIds = post.comments.map(comment => comment.id);
+  console.log(commentIds);
 
   if (!post) return res.status(404).send("게시글이 존재하지 않습니다.");
 
   res.json(post.comments || []);
+
 });
 
 
 
 
+//댓글 삭제 처리
+app.post('/posts/:postId/comment/:commentId/delete', (req, res) => {
+  const posts = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
+  const { postId, commentId } = req.params;
+  const { uid, password } = req.body;
+
+  const post = posts.find(p => p.id === postId);
+  if (!post) return res.status(404).send("게시글을 찾을 수 없습니다.");
+
+  const commentIndex = post.comments.findIndex(c => c.id === commentId);
+  if (commentIndex === -1) return res.status(404).send("댓글을 찾을 수 없습니다.");
+
+  const comment = post.comments[commentIndex];
+  const isOwner = comment.uid && uid && comment.uid === uid;
+  const isPasswordValid = comment.password && comment.password === password;
+
+  if (isOwner || isPasswordValid) {
+    post.comments.splice(commentIndex, 1);
+    fs.writeFileSync(DATA_FILE, JSON.stringify(posts, null, 2));
+    res.sendStatus(200);
+  } else {
+    res.status(403).send("권한이 없습니다.");
+  }
+});
 
 
 // 로그인 처리
