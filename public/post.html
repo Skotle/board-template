@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>글 보기</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="post.css">
 </head>
 <body>
   <div class="container">
     <h2 id="postTitle"></h2>
     <p><strong id="postAuthor"></strong> | <span id="postTime"></span></p>
     <p id="postContent"></p>
-    <img id="postImage" style="max-width: 300px;"><br><br>
+    <img id="postImage"><br><br>
     <form id="deleteForm">
       <button type="submit">삭제</button>
     </form>
@@ -18,20 +18,22 @@
   </div>
   <hr>
   <div class="comments-section">
-  <h3>댓글</h3>
- 
-  <form id="commentForm">
-    <input type="text" id="commentAuthor" placeholder="이름" required>
-    <input type="text" id="commentContent" placeholder="여기에 댓글 입력" required>
-    <input type="text" id="commentPassword" placeholder="비밀번호">
-    <button type="submit">댓글 작성</button>
-  </form>
-  <ul id="commentList"></ul>
+    <h3>댓글</h3>
+  
+    <form id="commentForm">
+      <div class ="topbar">
+      <input type="text" id="commentAuthor" placeholder="이름" required>
+      <input type="text" id="commentPassword" placeholder="비밀번호">
+      </div>
+      <input type="text" id="commentContent" placeholder="여기에 댓글 입력" required>
+      <button type="submit">댓글 작성</button>
+    </form>
+    <ul id="commentList"></ul>
 
-  <ul id="commentList"></ul>
+    <ul id="commentList"></ul>
 
 
-</div>
+  </div>
 
 
   <script src="post.js"></script>

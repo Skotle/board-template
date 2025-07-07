@@ -80,7 +80,6 @@ function escapeHtml(text) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
-
 function loadComments() {
   const token = localStorage.getItem("accessToken");
   const currentUsername = localStorage.getItem("username");
@@ -94,20 +93,21 @@ function loadComments() {
       comments.forEach(c => {
         const li = document.createElement("li");
         li.classList.add("comment-card");
+        li.id = `comment-${c.id}`; // ← 댓글 DOM의 id 지정
+        console.log(c.id);
 
-        // 조건: 토큰 존재 && 댓글 uid와 현재 유저명이 일치
-        const showDelete = token && c.uid === currentUsername;
+        const showDelete = (token && c.uid === currentUsername) || !c.uid;
 
+  
         let actionsHTML = "";
         if (showDelete) {
-          actionsHTML = `<button class="delete-comment-btn" data-comment-id="${c._id}">삭제</button>`;
+          actionsHTML = `<button class="delete-comment-btn" data-comment-id="${c.id}">삭제</button>`;
         }
 
         li.innerHTML = `
           <div class="comment-header">
             <div class="comment-author">
               ${escapeHtml(c.author)}
-              ${token && !c.author.includes("(") ? '<span class="badge">회원</span>' : ''}
             </div>
             <div class="comment-time">${escapeHtml(c.time)}</div>
           </div>
@@ -124,6 +124,7 @@ function loadComments() {
       console.error("댓글 불러오기 실패:", err);
     });
 }
+
 
 
 
@@ -169,28 +170,38 @@ document.addEventListener("click", async (e) => {
   if (e.target.classList.contains("delete-comment-btn")) {
     const commentId = e.target.dataset.commentId;
     const postId = new URLSearchParams(location.search).get('id');
+    const card = e.target.closest(".comment-card");
+    const firstAuthor = card.querySelector(".comment-header .comment-author")?.textContent.trim();
 
+    const storedUid = localStorage.getItem("username") || "";
+    console.log(storedUid);
+    let password = "";
+
+    if (!storedUid || firstAuthor!=storedUid) {
+      // 비회원인 경우 비밀번호 입력 받기
+      password = prompt("비밀번호를 입력하세요.");
+      if (!password) return alert("비밀번호를 입력해야 삭제할 수 있습니다.");
+    }
     if (!confirm("정말로 댓글을 삭제하시겠습니까?")) return;
 
     try {
-      const res = await fetch(`/posts/:${postId}}/comment/:${commentId}`, {
-        method: "POST",
+      const res = await fetch(`/posts/${postId}/comment/${commentId}`, {
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          uid: localStorage.getItem("userId"),
-          password: "" // 비회원용 비밀번호 입력 필드가 있다면 여기에 넣기
+          uid: storedUid,
+          password
         })
       });
 
       if (res.ok) {
         alert("댓글이 삭제되었습니다.");
-        loadComments(); // 댓글 목록 다시 불러오기
+        document.getElementById(`comment-${commentId}`)?.remove(); // DOM에서 제거
       } else {
         const msg = await res.text();
         alert("삭제 실패: " + msg);
-        console.log("삭제 실패: " + msg);
       }
     } catch (err) {
       console.error("삭제 요청 실패:", err);
@@ -198,12 +209,6 @@ document.addEventListener("click", async (e) => {
     }
   }
 });
-
-
-
-
-
-
 
 // 댓글 작성 처리
 document.getElementById("commentForm").addEventListener("submit", async (e) => {

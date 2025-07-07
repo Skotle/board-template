@@ -84,14 +84,14 @@ app.post('/posts/:id/comment', (req, res) => {
 
   if (!post) return res.status(404).send("게시글이 존재하지 않습니다.");
   if (!post.comments) post.comments = [];
-
+  const commentIds = post.comments.map(comment => comment.id);
   const comment = {
     id: uuidv4(),
     author,
     content,
     time,
     password,
-    uid
+    uid,
   };
 
   post.comments.push(comment);
@@ -106,8 +106,6 @@ app.get('/posts/:id/comments', (req, res) => {
   const { id } = req.params;
   const posts = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
   const post = posts.find(p => p.id === id);
-  const commentIds = post.comments.map(comment => comment.id);
-  console.log(commentIds);
 
   if (!post) return res.status(404).send("게시글이 존재하지 않습니다.");
 
@@ -142,6 +140,40 @@ app.post('/posts/:postId/comment/:commentId/delete', (req, res) => {
     res.status(403).send("권한이 없습니다.");
   }
 });
+
+
+
+app.delete('/posts/:postId/comment/:commentId', (req, res) => {
+  const { postId, commentId } = req.params;
+  const { uid, password = "" } = req.body;
+
+  const posts = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
+  const post = posts.find(p => p.id === postId);
+  if (!post) return res.status(404).send("게시글이 존재하지 않습니다.");
+
+  const commentIndex = post.comments.findIndex(c => c.id === commentId);
+  if (commentIndex === -1) {
+    return res.status(404).send("댓글이 존재하지 않습니다.");
+  }
+
+  const comment = post.comments[commentIndex];
+
+  // ✅ 삭제 조건: (회원이면 uid가 일치) || (비회원이면 비밀번호가 일치)
+  const isAuthorized = (uid && uid === comment.uid) || (!comment.uid && password === comment.password);
+
+  if (!isAuthorized) {
+    return res.status(403).send("삭제 권한이 없습니다.");
+  }
+
+  post.comments.splice(commentIndex, 1); // 댓글 삭제
+  fs.writeFileSync(DATA_FILE, JSON.stringify(posts, null, 2));
+  res.sendStatus(200);
+});
+
+
+
+
+
 
 
 // 로그인 처리
