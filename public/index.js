@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           </a>
           <a href="" style="color:gray; font-size:medium">[${post.comments.length}]</a>
         </div>
-        <div class="post-meta">
+        <div class="post-meta" style="font-style=bold;">
           ${post.author} • ${post.time}
         </div>
       `;

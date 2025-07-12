@@ -1,87 +1,10 @@
 [
-  {
-    "id": "0f075556-c047-4a16-aa8d-1683a6549674",
-    "author": "관리자",
-    "title": "중복1",
-    "content": "1234",
-    "category": "info",
-    "image": null,
-    "time": "2025. 5. 31. 오후 3:09:50",
-    "id_check": "관리자"
-  },
-  {
-    "id": "8fe65f76-36a5-43a7-8e24-18ffb7c23011",
-    "author": "ㅇㅇ(null)",
-    "title": "아이피테스트",
-    "content": "123",
-    "password": "1234",
-    "category": "default",
-    "image": null,
-    "time": "2025. 5. 31. 오후 3:57:20",
-    "id_check": "false"
-  },
-  {
-    "id": "fea36f93-99a8-4458-9611-50a0df0edf56",
-    "author": "ㅇㅇ(null)",
-    "title": "아이피2",
-    "content": "1",
-    "password": "1234",
-    "category": "default",
-    "image": null,
-    "time": "2025. 5. 31. 오후 3:58:16",
-    "id_check": "false"
-  },
-  {
-    "id": "5303b8aa-a154-453e-9ea4-737d2c524dcb",
-    "author": "dd",
-    "title": "af",
-    "content": "da",
-    "password": "ae",
-    "category": "default",
-    "image": null,
-    "time": "2025. 5. 31. 오후 4:19:15",
-    "id_check": "false"
-  },
-  {
-    "id": "0e253daa-cc32-4e43-ba3b-597e55d4ab21",
-    "author": "ㅇㅇ(104.28)",
-    "title": "할당 테스트",
-    "content": "ㅇㅂㅇ",
-    "password": "1234",
-    "category": "",
-    "image": null,
-    "time": "2025. 5. 31. 오후 4:35:50",
-    "id_check": "false",
-    "comments": [
-      {
-        "author": "AUTHOR",
-        "content": "TEMP",
-        "time": null
-      }
-    ]
-  },
-  {
-    "id": "c2d713ba-0165-4fe9-b8df-96bed71489ae",
-    "author": "슨일",
-    "title": "댓글 폼 테스트",
-    "content": "본문",
-    "category": "default",
-    "image": null,
-    "time": "2025. 6. 7. 오후 3:14:26",
-    "id_check": "슨일",
-    "comments": [
-      {
-        "author": "ㅇㅇ",
-        "content": "으",
-        "time": "2025. 6. 7. 오후 3:15:19"
-      }
-    ]
-  },
+
   {
     "id": "b5ef3afd-e5bc-4c29-982c-e56de01144c6",
     "author": "슨일",
-    "title": "테스트글",
-    "content": "본문==",
+    "title": "예시",
+    "content": "본문",
     "category": "default",
     "image": null,
     "time": "2025. 6. 7. 오후 3:19:28",
@@ -153,24 +76,7 @@
     "image": null,
     "time": "2025. 6. 21. 오후 3:24:08",
     "id_check": "슨일",
-    "comments": [
-      {
-        "id": "206b6036-6b12-4705-9a70-8346c7c9f0c1",
-        "author": "슨일",
-        "content": "응ㅇㅇㅇㅇ",
-        "time": "2025. 6. 21. 오후 3:24:18",
-        "password": "",
-        "uid": "슨일"
-      },
-      {
-        "id": "250e7c28-eaae-4ba1-a56a-1cc61a2be73b",
-        "author": "슨일",
-        "content": "음경",
-        "time": "2025. 6. 21. 오후 4:25:51",
-        "password": "",
-        "uid": "슨일"
-      }
-    ]
+    "comments": []
   },
   {
     "id": "747a0051-4380-4733-9e9b-3bc1a8dd4a4f",
