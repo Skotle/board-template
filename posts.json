@@ -1,5 +1,4 @@
 [
-
   {
     "id": "b5ef3afd-e5bc-4c29-982c-e56de01144c6",
     "author": "슨일",
@@ -100,14 +99,34 @@
     ]
   },
   {
-    "id": "cf058e4d-e8a6-48a7-97e3-8dece01fa783",
-    "author": "슨일",
-    "title": "212",
-    "content": "본문.",
+    "id": "85ba01bf-f872-46ee-9790-e446ba7931ee",
+    "author": "ㅇㅇ(104.28)",
+    "title": "로그인글",
+    "content": "ㅇㅇ",
     "category": "default",
     "image": null,
-    "time": "2025. 6. 28. 오후 3:04:26",
-    "id_check": "슨일",
-    "comments": []
+    "time": "2025. 7. 26. 오후 3:28:10",
+    "id_check": "ㅇㅇ(104.28)",
+    "comments": [
+      {
+        "id": "c6810b0c-fdb9-4bfe-8864-0d13d94fdaf1",
+        "author": "ㅇㅇ(104.28)",
+        "content": "확인 2",
+        "time": "2025. 7. 26. 오후 3:28:46",
+        "password": "1234",
+        "uid": ""
+      }
+    ]
+  },
+  {
+    "id": "11dffa4c-bc96-45dd-9927-2ad9acaab2ea",
+    "author": "ㅇㅇ(104.28)",
+    "title": "비로그인글",
+    "content": "확인용",
+    "password": "1234",
+    "category": "default",
+    "image": null,
+    "time": "2025. 7. 26. 오후 3:28:29",
+    "id_check": "false"
   }
 ]

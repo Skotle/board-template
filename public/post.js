@@ -70,7 +70,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-
 //댓글 로드
 function escapeHtml(text) {
   return text

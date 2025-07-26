@@ -142,7 +142,6 @@ app.post('/posts/:postId/comment/:commentId/delete', (req, res) => {
 });
 
 
-
 app.delete('/posts/:postId/comment/:commentId', (req, res) => {
   const { postId, commentId } = req.params;
   const { uid, password = "" } = req.body;
