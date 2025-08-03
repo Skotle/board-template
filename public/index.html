@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>임시게시판</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="index.css">
 </head>
 <body>
   <div class="container">
     <header class="auth-area">
       <span id="welcome" class="welcome-text" style="display:none;"></span>
       <a href="login.html" id="loginLink" class="auth-link">로그인</a>
-      <a href="newsign.html" id="loginLink" class="auth-link">가입</a>
+      <a href="newsign.html" id="newsign" class="auth-link">가입</a>
       <button id="logoutBtn" class="auth-btn" style="display:none;">로그아웃</button>
     </header>
 
@@ -28,15 +28,18 @@
     const token = localStorage.getItem("accessToken");
     const username = localStorage.getItem("username");
     const loginLink = document.getElementById("loginLink");
+    const newsign = document.getElementById("newsign");
     const logoutBtn = document.getElementById("logoutBtn");
     const welcome = document.getElementById("welcome");
 
     if (token && username) {
       loginLink.style.display = "none";
+      newsign.style.display = "none";
       logoutBtn.style.display = "inline-block";
       welcome.style.display = "inline-block";
       welcome.textContent = `환영합니다, ${username}님`;
     } else {
+      newsign.style.display = "inline-block";
       loginLink.style.display = "inline-block";
       logoutBtn.style.display = "none";
       welcome.style.display = "none";
@@ -46,6 +49,7 @@
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
       localStorage.removeItem("username");
+      localStorage.removeItem("ID");
       alert("로그아웃 되었습니다.");
       window.location.reload();
     });

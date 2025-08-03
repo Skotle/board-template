@@ -1,132 +1,33 @@
 [
   {
-    "id": "b5ef3afd-e5bc-4c29-982c-e56de01144c6",
-    "author": "슨일",
-    "title": "예시",
-    "content": "본문",
-    "category": "default",
-    "image": null,
-    "time": "2025. 6. 7. 오후 3:19:28",
-    "id_check": "슨일",
-    "comments": [
-      {
-        "author": "ㅇㅇ",
-        "content": "ㅇㅇㄴㅇ",
-        "time": "2025. 6. 7. 오후 3:20:37",
-        "password": "1234",
-        "subcomments": [
-          {
-            "author": "ㅇㅇ",
-            "content": "예시",
-            "time": null
-          }
-        ]
-      },
-      {
-        "author": "슨일",
-        "content": "대대대",
-        "time": "2025. 6. 7. 오후 4:05:42"
-      },
-      {
-        "author": "ㅇㅇ(104.28)",
-        "content": "댓글4",
-        "time": "2025. 6. 7. 오후 4:13:49"
-      },
-      {
-        "id": "ce8441c5-5a95-4e6d-a13a-bde72988f75b",
-        "author": "슨일",
-        "content": "테스트3",
-        "time": "2025. 6. 14. 오후 3:02:30",
-        "password": "",
-        "uid": null
-      },
-      {
-        "id": "f45998f8-8690-46e2-9ff9-d959dbcfb663",
-        "author": "에이전트(220.87)",
-        "content": "비밀번호 확인용",
-        "time": "2025. 6. 14. 오후 3:07:47",
-        "password": "1234",
-        "uid": null
-      },
-      {
-        "id": "f98b5251-164b-4dd1-af7e-9a3ee3c3abab",
-        "author": "ㅇㅇ(220.87)",
-        "content": "이재명",
-        "time": "2025. 6. 14. 오후 3:08:42",
-        "password": "",
-        "uid": null
-      },
-      {
-        "id": "8d10a8f4-2d73-4cec-a3ab-22a48f5daf1f",
-        "author": "ㅇㅇ(220.87)",
-        "content": "14",
-        "time": "2025. 6. 14. 오후 3:13:36",
-        "password": "",
-        "uid": null
-      }
-    ]
-  },
-  {
-    "id": "88ac5608-0b90-4eff-81b2-d0bd600d353c",
-    "author": "슨일",
-    "title": "댓글 테스트",
-    "content": "본문1",
-    "category": "default",
-    "image": null,
-    "time": "2025. 6. 21. 오후 3:24:08",
-    "id_check": "슨일",
-    "comments": []
-  },
-  {
-    "id": "747a0051-4380-4733-9e9b-3bc1a8dd4a4f",
-    "author": "ㅇㅇ(211.46)",
-    "title": "NON",
-    "content": "d",
-    "password": "1234",
-    "category": "default",
-    "image": "/uploads/2864577ef5e0c5e50125229908677e26",
-    "time": "2025. 6. 23. 오전 11:25:22",
-    "id_check": "false",
-    "comments": [
-      {
-        "id": "26d64f21-3006-40aa-98ab-29a7c8dfc79e",
-        "author": "ㅇㅇ(211.46)",
-        "content": "ㄹㅇ",
-        "time": "2025. 6. 23. 오전 11:32:49",
-        "password": "1234",
-        "uid": ""
-      }
-    ]
-  },
-  {
-    "id": "85ba01bf-f872-46ee-9790-e446ba7931ee",
-    "author": "ㅇㅇ(104.28)",
-    "title": "로그인글",
-    "content": "ㅇㅇ",
-    "category": "default",
-    "image": null,
-    "time": "2025. 7. 26. 오후 3:28:10",
-    "id_check": "ㅇㅇ(104.28)",
-    "comments": [
-      {
-        "id": "c6810b0c-fdb9-4bfe-8864-0d13d94fdaf1",
-        "author": "ㅇㅇ(104.28)",
-        "content": "확인 2",
-        "time": "2025. 7. 26. 오후 3:28:46",
-        "password": "1234",
-        "uid": ""
-      }
-    ]
-  },
-  {
-    "id": "11dffa4c-bc96-45dd-9927-2ad9acaab2ea",
-    "author": "ㅇㅇ(104.28)",
-    "title": "비로그인글",
-    "content": "확인용",
+    "id": "1c45c848-f4df-48fd-a85f-173ad04ede07",
+    "author": "ㅇㅇ",
+    "title": "예외 1",
+    "content": "ㅇㄹ",
     "password": "1234",
     "category": "default",
     "image": null,
-    "time": "2025. 7. 26. 오후 3:28:29",
-    "id_check": "false"
+    "time": "2025. 8. 3. 오후 5:04:29",
+    "ip": "104.28"
+  },
+  {
+    "id": "cf04201e-450a-41e6-87cd-d16122ab619a",
+    "author": "슨일",
+    "title": "예외 2",
+    "content": "로그인 작성",
+    "category": "default",
+    "image": null,
+    "time": "2025. 8. 3. 오후 5:04:57",
+    "usid": "skotle989"
+  },
+  {
+    "id": "3b680398-16eb-4302-87d4-1af5f22c4467",
+    "author": "ㅇㅇ(104.28)",
+    "title": "예외 3",
+    "content": "아이피와 회원",
+    "category": "default",
+    "image": null,
+    "time": "2025. 8. 3. 오후 5:06:32",
+    "usid": "testUser01"
   }
 ]

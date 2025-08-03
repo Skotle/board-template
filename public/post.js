@@ -17,7 +17,7 @@ const id = new URLSearchParams(location.search).get('id');
 
 document.addEventListener("DOMContentLoaded", async () => {
   const token = localStorage.getItem("accessToken");
-  const username = localStorage.getItem("username");
+  const ID = localStorage.getItem("ID");
 
   // IP 앞자리 설정
   ipFront = await getIpFrontPart();
@@ -29,10 +29,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // 게시글 렌더링
     document.getElementById('postTitle').textContent = post.title;
-    document.getElementById('postAuthor').textContent = post.author;
+    const authorElem = document.getElementById('postAuthor');
+    authorElem.textContent = post.author;
+
+    if (post.ip) {
+      const ipSpan = document.createElement("span");
+      ipSpan.textContent = `(${post.ip})`;
+      ipSpan.style.color = "rgba(147, 147, 147, 1)";
+      ipSpan.style.fontSize = "auto";
+      authorElem.appendChild(ipSpan);
+    }
+
     document.getElementById('postTime').textContent = post.time;
     document.getElementById('postContent').textContent = post.content;
-
     if (post.image) {
       document.getElementById('postImage').src = post.image;
     }
@@ -40,12 +49,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 삭제 권한 처리
     const deleteForm = document.getElementById("deleteForm");
     deleteForm.style.display = "none";
-    const loggedInUser = username;
+    const loggedInUser = ID;
 
-    if (post.id_check === loggedInUser) {
+    if (post.usid === loggedInUser) {
       deleteForm.dataset.authDelete = "true";  // 로그인 유저 글
       deleteForm.style.display = "inline-block";
-    } else if (post.id_check === "false") {
+    } else if (!post.usid) {
       deleteForm.dataset.authDelete = "false"; // 비로그인 유저 글
       deleteForm.style.display = "inline-block";
     }
@@ -104,18 +113,18 @@ function loadComments() {
         }
 
         li.innerHTML = `
-          <div class="comment-header">
-            <div class="comment-author">
-              ${escapeHtml(c.author)}
-            </div>
-            <div class="comment-time">${escapeHtml(c.time)}</div>
+        <div class="comment-header">
+          <div class="comment-author">
+            ${escapeHtml(c.author)}
+            ${c.ip ? `<span class="comment-ip"> (${escapeHtml(c.ip)})</span>` : ''}
           </div>
-          <div class="comment-body">
-            ${escapeHtml(c.content)}
-          </div>
-          ${actionsHTML}
-        `;
-
+          <div class="comment-time">${escapeHtml(c.time)}</div>
+        </div>
+        <div class="comment-body">
+          ${escapeHtml(c.content)}
+        </div>
+        ${actionsHTML}
+      `;
         commentList.appendChild(li);
       });
     })
@@ -219,7 +228,7 @@ document.getElementById("commentForm").addEventListener("submit", async (e) => {
   const token = localStorage.getItem("accessToken");
 
   let author  = "";
-
+  let ip = "";
   if (token) {
     author = localStorage.getItem("username") || "익명";
     uid = author;
@@ -235,7 +244,8 @@ document.getElementById("commentForm").addEventListener("submit", async (e) => {
       return;
     }
 
-    author = `${authorInput}(${ipFront || "??"})`;
+    author = `${authorInput}`;
+    ip = ipFront;
   }
 
   if (!content) {
@@ -247,7 +257,7 @@ document.getElementById("commentForm").addEventListener("submit", async (e) => {
     await fetch(`/posts/${id}/comment`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ author, content, password, uid })
+      body: JSON.stringify({ author, content, password, uid, ip })
     });
 
     // 입력창 초기화

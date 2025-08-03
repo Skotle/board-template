@@ -1,0 +1,112 @@
+body {
+  font-family: "Segoe UI", sans-serif;
+  background-color: #f7f7f7;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+.container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+header.auth-area {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.auth-link,
+.auth-btn {
+  margin-left: 10px;
+  padding: 6px 12px;
+  font-size: 14px;
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  color: #333;
+  transition: background-color 0.2s ease;
+}
+
+.auth-link:hover,
+.auth-btn:hover {
+  background-color: #f0f0f0;
+}
+
+.welcome-text {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.board-title {
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  text-align: center;
+  color: #222;
+}
+
+.top-bar {
+  text-align: right;
+  margin-bottom: 16px;
+}
+
+.write-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.write-btn:hover {
+  background-color: #45a049;
+}
+
+.post-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.post-list li {
+  padding: 14px 20px;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.15s ease;
+}
+
+.post-list li:hover {
+  background-color: #fafafa;
+}
+
+.post-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.post-title a {
+  color: #333;
+  text-decoration: none;
+}
+
+.post-title a:hover {
+  text-decoration: underline;
+}
+
+.post-meta {
+  font-size: 14px;
+  color: #777;
+}

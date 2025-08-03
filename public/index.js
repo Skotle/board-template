@@ -2,37 +2,44 @@ document.addEventListener("DOMContentLoaded", async () => {
   const postList = document.getElementById("postList");
 
   try {
-    const res = await fetch("/posts"); // 서버에서 게시글 목록 요청
+    const res = await fetch("/posts");
     const posts = await res.json();
 
     postList.innerHTML = ""; // 기존 목록 초기화
-    
+
     posts.reverse().forEach(post => {
       const li = document.createElement("li");
       li.className = "post-item";
+
+      const commentCount = Array.isArray(post.comments) ? post.comments.length : 0;
+
+      // 댓글 수 HTML
+      const commentHTML = commentCount > 0
+        ? `<a href="" style="color:gray; font-size:medium">[${commentCount}]</a>`
+        : `<a href="" style="color:gray; font-size:medium"></a>`;
+
+      // 기본 innerHTML
       li.innerHTML = `
         <div class="post-title">
           <a href="post.html?id=${post.id}">
             [${getCategoryLabel(post.category)}] ${post.title}
           </a>
+          ${commentHTML}
         </div>
         <div class="post-meta">
-          ${post.author} • ${post.time}
+          <span class="post-author">${post.author}</span> • ${post.time}
         </div>
       `;
-      if (post.comments){
-        li.innerHTML = `
-        <div class="post-title">
-          <a href="post.html?id=${post.id}">
-            [${getCategoryLabel(post.category)}] ${post.title}
-          </a>
-          <a href="" style="color:gray; font-size:medium">[${post.comments.length}]</a>
-        </div>
-        <div class="post-meta" style="font-style=bold;">
-          ${post.author} • ${post.time}
-        </div>
-      `;
+
+      // ip가 있을 경우 작성자 뒤에 추가
+      if (post.ip && post.ip.trim() !== "") {
+        const authorSpan = li.querySelector(".post-author");
+        const ipSpan = document.createElement("span");
+        ipSpan.textContent = `(${post.ip})`;
+        ipSpan.style.color = "gray";
+        authorSpan?.appendChild(ipSpan); // authorSpan이 null이 아닐 때만 추가
       }
+
       postList.appendChild(li);
     });
   } catch (err) {

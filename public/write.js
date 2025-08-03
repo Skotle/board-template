@@ -54,14 +54,15 @@ document.addEventListener("DOMContentLoaded", function () {
 document.getElementById('postForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const formData = new FormData();
-  const token = localStorage.getItem("accessToken");
+  const token = localStorage.getItem("ID");
 
   if (token) {
     const username = localStorage.getItem("username") || "익명";
+    const userID = localStorage.getItem("ID");
     formData.append('author', username);
-    formData.append('sign', username);
+    formData.append('sign', userID);
   } else {
-    formData.append('sign', false);
+    formData.append('nosign', ipFront);
     const authorInput = document.getElementById("author");
     const passwordInput = document.getElementById("password");
 
@@ -82,7 +83,7 @@ document.getElementById('postForm').addEventListener('submit', async (e) => {
       passwordInput.focus();
       return;
     }
-    formData.append("author", nickname+"("+ipFront+")");
+    formData.append("author", nickname);
     formData.append("password", passwordInput.value);
   }
 

@@ -24,8 +24,17 @@ app.get('/posts', (req, res) => {
 
 // 게시물 작성
 app.post('/posts', upload.single('image'), (req, res) => {
-  const posts = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
+  let posts;
+  try {
+    posts = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
+  } catch (err) {
+    console.error('게시글 파일 읽기 실패:', err);
+    return res.status(500).send('서버 오류');
+  }
+
   const id = uuidv4();
+
+  // 기본 newPost 객체
   const newPost = {
     id,
     author: req.body.author,
@@ -34,13 +43,29 @@ app.post('/posts', upload.single('image'), (req, res) => {
     password: req.body.password,
     category: req.body.category,
     image: req.file ? `/uploads/${req.file.filename}` : null,
-    time: new Date().toLocaleString(),
-    id_check: req.body.sign,  // uid 또는 false 저장됨
+    time: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
   };
+
+  // sign, nosign 조건에 따른 필드 처리
+  if (req.body.sign) {
+    newPost.usid = req.body.sign;
+  } else if (req.body.nosign) {
+    newPost.ip = req.body.nosign;
+    // usid는 아예 넣지 않음
+  }
+
   posts.push(newPost);
-  fs.writeFileSync(DATA_FILE, JSON.stringify(posts, null, 2));
-  res.sendStatus(200);
+
+  try {
+    fs.writeFileSync(DATA_FILE, JSON.stringify(posts, null, 2));
+  } catch (err) {
+    console.error('게시글 파일 저장 실패:', err);
+    return res.status(500).send('서버 오류');
+  }
+
+  res.status(201).json({ id });
 });
+
 
 // 개별 글 가져오기
 app.get('/posts/:id', (req, res) => {
@@ -76,7 +101,7 @@ app.post('/delete/:id', (req, res) => {
 // 댓글 폼 [[[중요]]]
 app.post('/posts/:id/comment', (req, res) => {
   const { id } = req.params;
-  const { author, content, password = "", uid = "" } = req.body;
+  const { author, content, password = "", uid = "", ip: ipFromClient } = req.body;
   const time = new Date().toLocaleString('ko-KR');
 
   const posts = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
@@ -84,21 +109,30 @@ app.post('/posts/:id/comment', (req, res) => {
 
   if (!post) return res.status(404).send("게시글이 존재하지 않습니다.");
   if (!post.comments) post.comments = [];
-  const commentIds = post.comments.map(comment => comment.id);
+
+  // 기본 댓글 객체
   const comment = {
     id: uuidv4(),
     author,
     content,
     time,
     password,
-    uid,
+    uid
   };
+
+  // ip 값이 존재하고 공백이 아니면 포함
+  if (ipFromClient && ipFromClient.trim() !== '') {
+    comment.ip = ipFromClient.trim();
+  }
 
   post.comments.push(comment);
 
   fs.writeFileSync(DATA_FILE, JSON.stringify(posts, null, 2));
   res.sendStatus(200);
 });
+
+
+
 
 
 // 댓글 조회(단일형)
@@ -196,7 +230,7 @@ app.post('/login', (req, res) => {
     accessToken,
     refreshToken,
     username: user.username,
-    signID: user.uid  // uid 반환 (고유 식별자)
+    signID: user.userID  // uid 반환 (고유 식별자)
   });
 });
 

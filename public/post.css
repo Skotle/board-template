@@ -1,50 +1,152 @@
-@media (max-width: 375px) {
-  .container {
-    margin: 10px;
-    padding: 12px;
-    max-width: 100%;
-    border-radius: 5px;
-    box-shadow: none;
-  }
-
-  .img #postImage {
-    max-width: 100%;
-    height: auto;
-  }
-
-  .comment-card {
-    padding: 10px 12px;
-    font-size: 0.85em;
-    min-height: 70px;
-    gap: 6px;
-  }
-
-  .comment-header {
-    flex-direction: column;
-    font-size: 0.75em;
-    gap: 2px;
-  }
-
-  .comment-body {
-    font-size: 0.85em;
-    line-height: 1.4;
-  }
-
-  #commentForm {
-    margin: 0 8px;
-    gap: 8px;
-  }
-
-  #commentAuthor,
-  #commentPassword {
-    width: 100%;
-    font-size: 0.85em;
-  }
-
-  #commentContent {
-    width: 100%;
-    height: 70px;
-    font-size: 0.9em;
-  }
+/* 기본 설정 */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f8;
+  margin: 0;
+  padding: 0;
+  color: #333;
 }
 
+.container {
+  max-width: 720px;
+  margin: 40px auto;
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+h2 {
+  margin-bottom: 10px;
+  color: #222;
+}
+
+p {
+  line-height: 1.6;
+}
+
+#postImage {
+  max-width: 100%;
+  height: auto;
+  margin-top: 20px;
+  border-radius: 8px;
+}
+
+#postAuthor {
+  font-weight: bold;
+}
+
+#postTime {
+  color: #999;
+  font-size: 0.9em;
+}
+
+form#deleteForm {
+  margin-top: 20px;
+}
+
+form#deleteForm button {
+  background-color: #ff5555;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+form#deleteForm button:hover {
+  background-color: #e04444;
+}
+
+a.back {
+  display: inline-block;
+  margin-top: 20px;
+  color: #0077cc;
+  text-decoration: none;
+}
+
+a.back:hover {
+  text-decoration: underline;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 40px 0;
+}
+
+/* 댓글 영역 */
+.comments-section {
+  max-width: 720px;
+  margin: 0 auto 60px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.comments-section h3 {
+  margin-bottom: 15px;
+  color: #444;
+}
+
+#commentForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.topbar {
+  display: flex;
+  gap: 10px;
+}
+
+input[type="text"] {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  flex: 1;
+}
+
+#commentContent {
+  width: 100%;
+}
+
+#commentForm button {
+  align-self: flex-end;
+  background-color: #4CAF50;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#commentForm button:hover {
+  background-color: #45a049;
+}
+
+#commentList {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+#commentList li {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+@media screen and (max-width: 600px) {
+  .container, .comments-section {
+    margin: 20px;
+    padding: 20px;
+  }
+
+  .topbar {
+    flex-direction: column;
+  }
+}
