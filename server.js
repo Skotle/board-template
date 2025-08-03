@@ -261,7 +261,8 @@ app.post('/add-user', (req, res) => {
   res.json({ message: '사용자가 추가되었습니다.', user: newUser });
 });
 
+const hostname = '0.0.0.0';
 
-app.listen(PORT, () => {
+app.listen(PORT, hostname,() => {
   console.log(`서버 실행 중: http://localhost:${PORT}`);
 });

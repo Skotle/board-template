@@ -1,3 +1,4 @@
+/* 기본 스타일 (PC 기준) */
 body {
   font-family: "Segoe UI", sans-serif;
   background-color: #f7f7f7;
@@ -18,6 +19,7 @@ body {
 header.auth-area {
   text-align: right;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .auth-link,
@@ -109,4 +111,76 @@ header.auth-area {
 .post-meta {
   font-size: 14px;
   color: #777;
+}
+
+
+/* ---------------------- */
+/* 📱 반응형 미디어 쿼리 */
+/* ---------------------- */
+
+/* 태블릿용 (768px 이하) */
+@media (max-width: 768px) {
+  .container {
+    margin: 20px;
+    padding: 16px;
+  }
+
+  .board-title {
+    font-size: 24px;
+  }
+
+  .post-title {
+    font-size: 16px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .auth-link,
+  .auth-btn {
+    font-size: 13px;
+    margin-top: 6px;
+  }
+
+  .write-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+}
+
+/* 모바일용 (480px 이하) */
+@media (max-width: 480px) {
+  .container {
+    margin: 10px;
+    padding: 12px;
+  }
+
+  .board-title {
+    font-size: 20px;
+  }
+
+  .post-title {
+    font-size: 14px;
+  }
+
+  .auth-area {
+    text-align: center;
+  }
+
+  .auth-link,
+  .auth-btn {
+    display: block;
+    margin: 6px auto;
+    width: 100px;
+    text-align: center;
+  }
+
+  .top-bar {
+    text-align: center;
+  }
+
+  .write-btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
 }
