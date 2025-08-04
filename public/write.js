@@ -1,5 +1,10 @@
-// 전역 변수로 선언 (초기값 null)
-let ipFront;
+// DOM 요소 참조
+const contentDiv = document.getElementById('content');
+const imageInput = document.getElementById('image');
+const postForm = document.getElementById('postForm');
+
+// 로그인 상태 및 IP 앞부분 (예: 이 부분은 실제 앱에 맞게 수정 필요)
+let ipFront = null;
 
 async function getIpFrontPart() {
   try {
@@ -15,15 +20,42 @@ async function getIpFrontPart() {
   }
 }
 
-// 전역 변수에 할당
-getIpFrontPart().then(front => {
-  ipFront = front;
-  if (ipFront) {
-    console.log('IP 앞부분 할당 완료:', ipFront);
-  } else {
-    console.log('IP를 가져올 수 없습니다.');
+// IP 앞부분 얻기
+getIpFrontPart().then(front => { ipFront = front; });
+
+// 이미지 다중 삽입: 선택한 이미지 파일을 읽어 contenteditable div 커서 위치에 삽입
+imageInput.addEventListener('change', async (e) => {
+  const files = e.target.files;
+  if (!files.length) return;
+
+  const formData = new FormData();
+  for (const file of files) {
+    formData.append('images', file);
   }
+  
+  try {
+    const response = await fetch('/upload-images', {
+      method: 'POST',
+      body: formData
+    });
+
+    const result = await response.json();
+
+    if (response.ok && result.urls) {
+      for (const url of result.urls) {
+        insertImageAtCursor(url); // base64 → URL 삽입으로 변경됨
+      }
+    } else {
+      alert('이미지 업로드 실패: ' + result.message);
+    }
+  } catch (err) {
+    console.error('업로드 에러:', err);
+    alert('이미지 업로드 중 오류가 발생했습니다.');
+  }
+  
+  e.target.value = ''; // input 초기화
 });
+
 
 document.addEventListener("DOMContentLoaded", function () {
   const token = localStorage.getItem("accessToken");
@@ -31,79 +63,161 @@ document.addEventListener("DOMContentLoaded", function () {
   const passwordInput = document.getElementById("password");
 
   if (token) {
-    // 로그인 상태: 비밀번호 입력창 숨김 + required 제거 + disabled 처리
+    // 로그인 상태 → 닉네임, 비밀번호 숨김
+    authOnlyElements.forEach(el => {
+      el.style.display = "none";
+      el.disabled = true;
+      el.removeAttribute("required");
+    });
     if (passwordInput) {
       passwordInput.style.display = "none";
       passwordInput.disabled = true;
       passwordInput.removeAttribute("required");
     }
-    authOnlyElements.forEach(el => el.style.display = "none");
   } else {
-    // 비로그인 상태: 비밀번호 입력창 보임 + required 설정
+    // 비로그인 상태 → 닉네임, 비밀번호 보임
+    authOnlyElements.forEach(el => {
+      el.style.display = "block";  // block 또는 inline-block, CSS에 맞게 조절
+      el.disabled = false;
+      el.setAttribute("required", "true");
+    });
     if (passwordInput) {
-      passwordInput.style.display = "inline-block";
+      passwordInput.style.display = "block";
       passwordInput.disabled = false;
       passwordInput.setAttribute("required", "true");
     }
-    authOnlyElements.forEach(el => el.style.display = "inline-block");
   }
 });
 
 
+// contenteditable div 커서 위치에 이미지 삽입 함수
+function insertImageAtCursor(imageSrc) {
+  const sel = window.getSelection();
+  if (!sel || sel.rangeCount === 0) {
+    contentDiv.focus();
+  }
+  const range = sel.getRangeAt(0);
 
-document.getElementById('postForm').addEventListener('submit', async (e) => {
+  const img = document.createElement('img');
+  img.src = imageSrc;
+  img.style.maxWidth = '100%';
+  img.alt = '첨부된 이미지';
+
+  range.deleteContents();
+  range.insertNode(img);
+
+  // 커서를 이미지 뒤로 이동
+  range.setStartAfter(img);
+  range.setEndAfter(img);
+  sel.removeAllRanges();
+  sel.addRange(range);
+
+  contentDiv.focus();
+}
+
+// 폼 제출 이벤트 처리
+postForm.addEventListener('submit', async (e) => {
   e.preventDefault();
+
+  // 로그인 토큰, 닉네임 등 로컬스토리지에서 불러오기 (필요 시 앱에 맞게 수정)
+  const token = localStorage.getItem("accessToken");
+
   const formData = new FormData();
-  const token = localStorage.getItem("ID");
 
   if (token) {
     const username = localStorage.getItem("username") || "익명";
-    const userID = localStorage.getItem("ID");
-    formData.append('author', username);
-    formData.append('sign', userID);
+    const userID = localStorage.getItem("ID") || "";
+    formData.append("author", username);
+    formData.append("sign", userID);
   } else {
-    formData.append('nosign', ipFront);
-    const authorInput = document.getElementById("author");
-    const passwordInput = document.getElementById("password");
+    const author = document.getElementById('author').value.trim();
+    const passwordInput = document.getElementById('password');
+    const password = passwordInput ? passwordInput.value.trim() : '';
 
-    if (!authorInput) {
-      alert("닉네임 입력 필드가 없습니다.");
+    if (!author) {
+      alert('닉네임을 입력해주세요.');
+      return;
+    }
+    if (!password) {
+      alert('비밀번호를 입력해주세요.');
       return;
     }
 
-    const nickname = authorInput.value.trim();
-    if (!nickname) {
-      alert("닉네임을 입력해주세요.");
-      authorInput.focus();
-      return;
-    }
-
-    if (!passwordInput || !passwordInput.value.trim()) {
-      alert("비밀번호를 입력해주세요.");
-      passwordInput.focus();
-      return;
-    }
-    formData.append("author", nickname);
-    formData.append("password", passwordInput.value);
+    formData.append('author', author);
+    formData.append('password', password);
+    formData.append('nosign', ipFront || '');
   }
 
-  formData.append('title', document.getElementById('title').value);
-  formData.append('content', document.getElementById('content').value);
+  const title = document.getElementById('title').value.trim();
+  if (!title) {
+    alert('제목을 입력해주세요.');
+    return;
+  }
+
+  const contentHTML = contentDiv.innerHTML.trim();
+  if (!contentHTML) {
+    alert('본문 내용을 입력하세요.');
+    contentDiv.focus();
+    return;
+  }
+
+  formData.append('title', title);
+  formData.append('content', contentHTML);
   formData.append('category', document.getElementById('category').value);
 
-  const image = document.getElementById('image').files[0];
-  if (image) formData.append('image', image);
+  // 이미지 여러 개 파일폼에 추가
+  const imageFiles = imageInput.files;
+  for (const file of imageFiles) {
+    formData.append('images', file);
+  }
 
-  const res = await fetch('/posts', {
-    method: 'POST',
-    body: formData
-  });
+  try {
+    const res = await fetch('/posts', {
+      method: 'POST',
+      body: formData
+    });
 
-  if (res.ok) {
-    alert('작성 완료');
-    window.location.href = 'index.html';
-  } else {
-    const errorText = await res.text();
-    alert('작성 실패: ' + errorText);
+    if (res.ok) {
+      alert('작성 완료!');
+      window.location.href = 'index.html';
+    } else {
+      const errorText = await res.text();
+      alert('작성 실패: ' + errorText);
+    }
+  } catch (err) {
+    alert('통신 오류: ' + err.message);
   }
 });
+
+async function uploadImages() {
+  const input = document.getElementById('imageInput');
+  const files = input.files;
+
+  if (!files.length) return;
+
+  const formData = new FormData();
+  for (let file of files) {
+    formData.append('images', file);
+  }
+
+  try {
+    const response = await fetch('/upload-images', {
+      method: 'POST',
+      body: formData
+    });
+
+    const result = await response.json();
+
+    if (response.ok && result.urls) {
+      const contentEl = document.getElementById('content');
+      for (const url of result.urls) {
+        contentEl.value += `<img src="${url}" style="max-width:100%;"><br>\n`;
+      }
+    } else {
+      alert('이미지 업로드 실패: ' + result.message);
+    }
+  } catch (err) {
+    console.error('업로드 에러:', err);
+    alert('이미지 업로드 중 오류가 발생했습니다.');
+  }
+}

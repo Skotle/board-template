@@ -1,6 +1,6 @@
 let ipFront = null;
 
-// IP 앞자리 추출
+// IP 앞자리 추출 함수
 async function getIpFrontPart() {
   try {
     const response = await fetch('https://api.ipify.org?format=json');
@@ -15,71 +15,7 @@ async function getIpFrontPart() {
 
 const id = new URLSearchParams(location.search).get('id');
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const token = localStorage.getItem("accessToken");
-  const ID = localStorage.getItem("ID");
-
-  // IP 앞자리 설정
-  ipFront = await getIpFrontPart();
-
-  // 게시글 불러오기
-  try {
-    const res = await fetch(`/posts/${id}`);
-    const post = await res.json();
-
-    // 게시글 렌더링
-    document.getElementById('postTitle').textContent = post.title;
-    const authorElem = document.getElementById('postAuthor');
-    authorElem.textContent = post.author;
-
-    if (post.ip) {
-      const ipSpan = document.createElement("span");
-      ipSpan.textContent = `(${post.ip})`;
-      ipSpan.style.color = "rgba(147, 147, 147, 1)";
-      ipSpan.style.fontSize = "auto";
-      authorElem.appendChild(ipSpan);
-    }
-
-    document.getElementById('postTime').textContent = post.time;
-    document.getElementById('postContent').textContent = post.content;
-    if (post.image) {
-      document.getElementById('postImage').src = post.image;
-    }
-
-    // 삭제 권한 처리
-    const deleteForm = document.getElementById("deleteForm");
-    deleteForm.style.display = "none";
-    const loggedInUser = ID;
-
-    if (post.usid === loggedInUser) {
-      deleteForm.dataset.authDelete = "true";  // 로그인 유저 글
-      deleteForm.style.display = "inline-block";
-    } else if (!post.usid) {
-      deleteForm.dataset.authDelete = "false"; // 비로그인 유저 글
-      deleteForm.style.display = "inline-block";
-    }
-
-    loadComments(); // 댓글 로드
-  } catch (err) {
-    console.error("게시글 로딩 실패:", err);
-    alert("게시글을 불러오는 데 실패했습니다.");
-  }
-
-  // 로그인 시 댓글 작성 폼 제어
-  const authorInput = document.getElementById("commentAuthor");
-  const passwordInput = document.getElementById("commentPassword");
-  if (token) {
-    authorInput.style.display = "none";
-    authorInput.disabled = true;
-    authorInput.removeAttribute("required");
-
-    passwordInput.style.display = "none";
-    passwordInput.disabled = true;
-    passwordInput.removeAttribute("required");
-  }
-});
-
-//댓글 로드
+// HTML 이스케이프
 function escapeHtml(text) {
   return text
     .replace(/&/g, "&amp;")
@@ -88,133 +24,91 @@ function escapeHtml(text) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
-function loadComments() {
+
+// 댓글 및 답글 렌더링
+function renderComments(comments) {
+  const commentList = document.getElementById("commentList");
+  commentList.innerHTML = "";
+
   const token = localStorage.getItem("accessToken");
   const currentUsername = localStorage.getItem("username");
 
+  comments.forEach(c => {
+    const li = document.createElement("li");
+    li.classList.add("comment-card");
+    li.id = `comment-${c.id}`;
+
+    const showDelete = (token && c.uid === currentUsername) || !c.uid;
+
+    let actionsHTML = "";
+    if (showDelete) {
+      actionsHTML += `<button class="delete-comment-btn" data-comment-id="${c.id}">삭제</button>`;
+    }
+    actionsHTML += `<button class="reply-btn" data-comment-id="${c.id}">답글쓰기</button>`;
+
+    li.innerHTML = `
+      <div class="comment-header">
+        <div class="comment-author">
+          ${escapeHtml(c.author)}
+          ${c.ip ? `<span class="comment-ip"> (${escapeHtml(c.ip)})</span>` : ''}
+        </div>
+        <div class="comment-time">${escapeHtml(c.time)}</div>
+      </div>
+      <div class="comment-body">${escapeHtml(c.content)}</div>
+      ${actionsHTML}
+      <ul class="reply-list"></ul>
+    `;
+    commentList.appendChild(li);
+
+    // 답글 렌더링
+    if (c.replies && c.replies.length > 0) {
+      const replyList = li.querySelector(".reply-list");
+      c.replies.forEach(reply => {
+        const replyLi = document.createElement("li");
+        replyLi.classList.add("reply-card");
+        replyLi.id = `comment-${reply.id}`;
+        replyLi.innerHTML = `
+          <div class="comment-header">
+            <div class="comment-author">
+              ${escapeHtml(reply.author)}
+              ${reply.ip ? `<span class="comment-ip"> (${escapeHtml(reply.ip)})</span>` : ''}
+            </div>
+            <div class="comment-time">${escapeHtml(reply.time)}</div>
+          </div>
+          <div class="comment-body">${escapeHtml(reply.content)}</div>
+        `;
+        replyList.appendChild(replyLi);
+      });
+    }
+  });
+}
+
+// 댓글 불러오기
+function loadComments() {
   fetch(`/posts/${id}/comments`)
     .then(res => res.json())
-    .then(comments => {
-      const commentList = document.getElementById("commentList");
-      commentList.innerHTML = "";
-
-      comments.forEach(c => {
-        const li = document.createElement("li");
-        li.classList.add("comment-card");
-        li.id = `comment-${c.id}`; // ← 댓글 DOM의 id 지정
-        console.log(c.id);
-
-        const showDelete = (token && c.uid === currentUsername) || !c.uid;
-
-  
-        let actionsHTML = "";
-        if (showDelete) {
-          actionsHTML = `<button class="delete-comment-btn" data-comment-id="${c.id}">삭제</button>`;
-        }
-
-        li.innerHTML = `
-        <div class="comment-header">
-          <div class="comment-author">
-            ${escapeHtml(c.author)}
-            ${c.ip ? `<span class="comment-ip"> (${escapeHtml(c.ip)})</span>` : ''}
-          </div>
-          <div class="comment-time">${escapeHtml(c.time)}</div>
-        </div>
-        <div class="comment-body">
-          ${escapeHtml(c.content)}
-        </div>
-        ${actionsHTML}
-      `;
-        commentList.appendChild(li);
-      });
-    })
+    .then(renderComments)
     .catch(err => {
       console.error("댓글 불러오기 실패:", err);
     });
 }
 
+document.addEventListener("DOMContentLoaded", async () => {
+  ipFront = await getIpFrontPart();
+  loadComments();
 
+  const token = localStorage.getItem("accessToken");
+  const authorInput = document.getElementById("commentAuthor");
+  const passwordInput = document.getElementById("commentPassword");
 
+  if (token) {
+    authorInput.style.display = "none";
+    authorInput.disabled = true;
+    authorInput.removeAttribute("required");
 
-
-// 게시글 삭제 처리
-document.getElementById('deleteForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const isAuthDelete = e.target.dataset.authDelete === "true";
-  const bodyData = {};
-
-  if (!isAuthDelete) {
-    const password = prompt("비밀번호 입력:");
-    if (!password || password.trim() === "") {
-      alert("비밀번호를 입력해야 삭제할 수 있습니다.");
-      return;
-    }
-    bodyData.password = password.trim();
-  }
-
-  try {
-    const res = await fetch(`/delete/${id}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(bodyData)
-    });
-
-    if (res.ok) {
-      alert('삭제 완료');
-      window.location.href = 'index.html';
-    } else {
-      const errorMsg = await res.text();
-      alert('삭제 실패: ' + errorMsg);
-    }
-  } catch (err) {
-    console.error("삭제 요청 실패:", err);
-    alert("삭제 요청 중 오류가 발생했습니다.");
-  }
-});
-
-
-//댓글 삭제
-document.addEventListener("click", async (e) => {
-  if (e.target.classList.contains("delete-comment-btn")) {
-    const commentId = e.target.dataset.commentId;
-    const postId = new URLSearchParams(location.search).get('id');
-    const card = e.target.closest(".comment-card");
-    const firstAuthor = card.querySelector(".comment-header .comment-author")?.textContent.trim();
-
-    const storedUid = localStorage.getItem("username") || "";
-    console.log(storedUid);
-    let password = "";
-
-    if (!storedUid || firstAuthor!=storedUid) {
-      // 비회원인 경우 비밀번호 입력 받기
-      password = prompt("비밀번호를 입력하세요.");
-      if (!password) return alert("비밀번호를 입력해야 삭제할 수 있습니다.");
-    }
-    if (!confirm("정말로 댓글을 삭제하시겠습니까?")) return;
-
-    try {
-      const res = await fetch(`/posts/${postId}/comment/${commentId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          uid: storedUid,
-          password
-        })
-      });
-
-      if (res.ok) {
-        alert("댓글이 삭제되었습니다.");
-        document.getElementById(`comment-${commentId}`)?.remove(); // DOM에서 제거
-      } else {
-        const msg = await res.text();
-        alert("삭제 실패: " + msg);
-      }
-    } catch (err) {
-      console.error("삭제 요청 실패:", err);
-      alert("오류가 발생했습니다.");
-    }
+    passwordInput.style.display = "none";
+    passwordInput.disabled = true;
+    passwordInput.removeAttribute("required");
   }
 });
 
@@ -227,7 +121,7 @@ document.getElementById("commentForm").addEventListener("submit", async (e) => {
   let uid = "";
   const token = localStorage.getItem("accessToken");
 
-  let author  = "";
+  let author = "";
   let ip = "";
   if (token) {
     author = localStorage.getItem("username") || "익명";
@@ -238,13 +132,11 @@ document.getElementById("commentForm").addEventListener("submit", async (e) => {
       alert("작성자를 입력해주세요.");
       return;
     }
-
     if (!password) {
       alert("비밀번호를 입력하세요");
       return;
     }
-
-    author = `${authorInput}`;
+    author = authorInput;
     ip = ipFront;
   }
 
@@ -260,16 +152,115 @@ document.getElementById("commentForm").addEventListener("submit", async (e) => {
       body: JSON.stringify({ author, content, password, uid, ip })
     });
 
-    // 입력창 초기화
     if (!token) {
       document.getElementById("commentAuthor").value = "";
       document.getElementById("commentPassword").value = "";
     }
     document.getElementById("commentContent").value = "";
 
-    loadComments(); // 댓글 다시 불러오기
+    loadComments();
   } catch (err) {
     console.error("댓글 작성 실패:", err);
     alert("댓글 작성 중 오류가 발생했습니다.");
+  }
+});
+
+// 댓글 리스트 내 이벤트 위임 - 삭제, 답글쓰기 버튼 처리
+document.getElementById("commentList").addEventListener("click", (e) => {
+  if (e.target.classList.contains("delete-comment-btn")) {
+    const commentId = e.target.dataset.commentId;
+    const postId = id;
+    const card = e.target.closest(".comment-card");
+    const firstAuthor = card.querySelector(".comment-header .comment-author")?.textContent.trim();
+    const storedUid = localStorage.getItem("username") || "";
+    let password = "";
+
+    if (!storedUid || firstAuthor != storedUid) {
+      password = prompt("비밀번호를 입력하세요.");
+      if (!password) return alert("비밀번호를 입력해야 삭제할 수 있습니다.");
+    }
+    if (!confirm("정말로 댓글을 삭제하시겠습니까?")) return;
+
+    fetch(`/posts/${postId}/comment/${commentId}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ uid: storedUid, password })
+    }).then(async res => {
+      if (res.ok) {
+        alert("댓글이 삭제되었습니다.");
+        document.getElementById(`comment-${commentId}`)?.remove();
+      } else {
+        const msg = await res.text();
+        alert("삭제 실패: " + msg);
+      }
+    }).catch(err => {
+      console.error(err);
+      alert("오류가 발생했습니다.");
+    });
+  }
+
+  // 답글쓰기 버튼 클릭 시
+  if (e.target.classList.contains("reply-btn")) {
+    const commentId = e.target.dataset.commentId;
+    const commentLi = document.getElementById(`comment-${commentId}`);
+
+    // 기존 폼 있으면 제거 (토글)
+    let existingForm = commentLi.querySelector(".reply-form");
+    if (existingForm) {
+      existingForm.remove();
+      return;
+    }
+
+    // 답글 폼 생성
+    const form = document.createElement("form");
+    form.classList.add("reply-form");
+    form.innerHTML = `
+      <textarea name="replyContent" rows="3" placeholder="답글을 입력하세요" required></textarea><br/>
+      <input type="text" id="replyAuthor" placeholder="작성자" required />
+      <input type="password" name="replyPassword" placeholder="비밀번호" required />
+      <button type="submit">답글 등록</button>
+    `;
+
+    const token = localStorage.getItem("accessToken");
+
+    if (token) {
+      form.innerHTML = `
+        <textarea name="replyContent" rows="3" placeholder="답글을 입력하세요" required></textarea><br/>
+        <button type="submit">답글 등록</button>
+      `;
+      const author = localStorage.getItem("username");
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const content = form.replyContent.value.trim();
+      const author = form.replyAuthor.value.trim();
+      const password = form.replyPassword.value.trim();
+      if (!content || !author || !password) {
+        alert("모든 항목을 입력해주세요.");
+        return;
+      }
+
+      try {
+        const res = await fetch(`/posts/${id}/comment/${commentId}/reply`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ author, content, password })
+        });
+
+        if (res.ok) {
+          alert("답글이 등록되었습니다.");
+          loadComments();
+        } else {
+          const msg = await res.text();
+          alert("답글 등록 실패: " + msg);
+        }
+      } catch (err) {
+        console.error(err);
+        alert("답글 등록 중 오류가 발생했습니다.");
+      }
+    });
+
+    commentLi.appendChild(form);
   }
 });

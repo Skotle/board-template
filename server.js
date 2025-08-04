@@ -7,7 +7,16 @@ const { v4: uuidv4 } = require('uuid');
 const app = express();
 const PORT = 3000;
 
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({
+  dest: 'uploads/',
+  limits: {
+    fieldSize: 10 * 1024 * 1024, // 각 필드 최대 크기 (예: 10MB)
+    fileSize: 5 * 1024 * 1024,   // 파일 하나당 최대 크기 (예: 5MB)
+    files: 10,                   // 최대 파일 개수
+    fields: 20                  // 최대 필드 개수
+  }
+});
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -42,7 +51,9 @@ app.post('/posts', upload.single('image'), (req, res) => {
     content: req.body.content,
     password: req.body.password,
     category: req.body.category,
-    image: req.file ? `/uploads/${req.file.filename}` : null,
+    images: req.files && req.files.length > 0
+  ? req.files.map(file => `/uploads/${file.filename}`)
+  : [],
     time: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
   };
 
@@ -65,6 +76,29 @@ app.post('/posts', upload.single('image'), (req, res) => {
 
   res.status(201).json({ id });
 });
+
+
+
+//이미지 처리
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, 'public/uploads'),
+  filename: (req, file, cb) => {
+    const unique = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, unique + path.extname(file.originalname));
+  }
+});
+
+const uploadMulti = multer({ storage }).array('images', 10);  // 최대 10개
+
+app.post('/upload-images', uploadMulti, (req, res) => {
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({ message: '파일 없음' });
+  }
+
+  const urls = req.files.map(file => `/uploads/${file.filename}`);
+  res.json({ urls });
+});
+
 
 
 // 개별 글 가져오기
@@ -127,6 +161,46 @@ app.post('/posts/:id/comment', (req, res) => {
 
   post.comments.push(comment);
 
+  fs.writeFileSync(DATA_FILE, JSON.stringify(posts, null, 2));
+  res.sendStatus(200);
+});
+
+app.post('/posts/:postId/comment/:commentId/reply', (req, res) => {
+  const { postId, commentId } = req.params;
+  const { author, content, password = "", uid = "", ip: ipFromClient } = req.body;
+  const time = new Date().toLocaleString('ko-KR');
+
+  const posts = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
+  const post = posts.find(p => p.id === postId);
+  if (!post) return res.status(404).send("게시글이 존재하지 않습니다.");
+
+  if (!post.comments) post.comments = [];
+
+  // 댓글 찾기 (대댓글은 한 단계만 지원한다고 가정)
+  const parentComment = post.comments.find(c => c.id === commentId);
+  if (!parentComment) return res.status(404).send("부모 댓글이 존재하지 않습니다.");
+
+  // replies 배열 초기화
+  if (!parentComment.replies) parentComment.replies = [];
+
+  // 답글 객체 생성
+  const reply = {
+    id: uuidv4(),
+    author,
+    content,
+    time,
+    password,
+    uid
+  };
+
+  if (ipFromClient && ipFromClient.trim() !== '') {
+    reply.ip = ipFromClient.trim();
+  }
+
+  // 답글 추가
+  parentComment.replies.push(reply);
+
+  // JSON 파일 저장
   fs.writeFileSync(DATA_FILE, JSON.stringify(posts, null, 2));
   res.sendStatus(200);
 });

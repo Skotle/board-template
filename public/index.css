@@ -94,7 +94,6 @@ header.auth-area {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 6px;
-  display: flex;
   align-items: center;
   justify-content: space-between;
 }
@@ -109,8 +108,12 @@ header.auth-area {
 }
 
 .post-meta {
-  font-size: 14px;
+  font-size: 15px;
   color: #777;
+}
+.post-author{
+    font-weight: bold;
+    color:black;
 }
 
 

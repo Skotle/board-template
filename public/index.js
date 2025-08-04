@@ -13,12 +13,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const commentCount = Array.isArray(post.comments) ? post.comments.length : 0;
 
-      // 댓글 수 HTML
       const commentHTML = commentCount > 0
         ? `<a href="" style="color:gray; font-size:medium">[${commentCount}]</a>`
         : `<a href="" style="color:gray; font-size:medium"></a>`;
 
-      // 기본 innerHTML
       li.innerHTML = `
         <div class="post-title">
           <a href="post.html?id=${post.id}">
@@ -31,13 +29,21 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
       `;
 
-      // ip가 있을 경우 작성자 뒤에 추가
+      const authorSpan = li.querySelector(".post-author");
+
       if (post.ip && post.ip.trim() !== "") {
-        const authorSpan = li.querySelector(".post-author");
+        // IP가 있는 경우: 아이콘 없이 IP 표시
         const ipSpan = document.createElement("span");
-        ipSpan.textContent = `(${post.ip})`;
-        ipSpan.style.color = "gray";
-        authorSpan?.appendChild(ipSpan); // authorSpan이 null이 아닐 때만 추가
+        ipSpan.textContent = ` (${post.ip})`;
+        ipSpan.style.color = "rgba(154, 154, 154, 1)";
+        authorSpan?.appendChild(ipSpan);
+      } else {
+        // IP가 없으면 로그인 사용자: 아이콘 표시
+        const img = document.createElement("img");
+        img.src = "/img/login-user.png";
+        img.style.height = "15px";
+        img.style.marginRight = "4px";
+        authorSpan?.parentNode?.insertBefore(img, authorSpan);
       }
 
       postList.appendChild(li);
