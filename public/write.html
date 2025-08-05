@@ -1,24 +1,180 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
+  <link rel="icon" href="img/favicon.png" type="image/png">
+  <meta charset="UTF-8" />
   <title>글 작성</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="write.css" />
 </head>
 <body>
   <div class="container">
     <h1>새 글 작성</h1>
-    <form id="postForm" enctype="multipart/form-data">
-        <input type="text" name="author"placeholder="이름" required>
-        <input type="text" name="title" placeholder="제목" required>
-        <textarea type="text" name="content" placeholder="본문" required></textarea>
-        <input type="password" name="password"placeholder="비밀번호" required>
-        <input type="file" name="image">
-        <button type="submit">작성</button>
-      </form>
-      
+
+    <select id="category" name="category" required>
+      <option value="default">일반</option>
+      <option value="quest">질문</option>
+      <option value="info">정보</option>
+      <option value="notice">공지</option>
+    </select>
+
+    <form id="postForm">
+      <input
+        type="text"
+        id="author"
+        name="author"
+        class="auth-only"
+        placeholder="닉네임"
+        style="width: 150px; display: none;"
+      /><br />
+
+      <input type="password" id="password" placeholder="비밀번호" class="non-auth-only" required /><br />
+
+      <input type="text" id="title" name="title" placeholder="제목" required /><br />
+
+      <div class="format-toolbar">
+        <button type="button" onclick="insertFormat('**')"><b>굵게</b></button>
+        <button type="button" onclick="insertFormat('__')"><u>밑줄</u></button>
+        <button type="button" onclick="insertFormat('~~')"><s>취소선</s></button>
+        <button type="button" onclick="insertFormat('\\n')">줄바꿈</button>
+
+        <span style="margin-left: 20px;">폰트 사이즈:</span>
+        <select id="fontSizeSelect" onchange="changeFontSize(this.value)">
+          <option value="">기본</option>
+          <option value="12px">12px</option>
+          <option value="14px">14px</option>
+          <option value="16px">16px</option>
+          <option value="18px">18px</option>
+          <option value="20px">20px</option>
+          <option value="24px">24px</option>
+        </select>
+        <span id="currentFontSize" style="margin-left: 10px; font-weight: bold;">(기본)</span>
+      </div>
+
+
+      <!-- 본문 입력 영역: contenteditable div -->
+      <div
+        id="content"
+        name="content"
+        contenteditable="true"
+        spellcheck="true"
+        aria-multiline="true"
+        role="textbox"
+        style="width: 100%; min-height: 400px; max-height: 600px; border: 1px solid #ccc; padding: 10px; overflow-y: auto;"
+        required
+      ></div>
+
+      <input type="file" id="image" name="images" multiple accept="image/*" /><br />
+
+      <button type="submit">작성 완료</button>
+    </form>
+
+
     <a class="back" href="index.html">← 목록으로</a>
   </div>
+
+  <script>
+    function insertFormat(startTag) {
+  const contentDiv = document.getElementById('content');
+  const sel = window.getSelection();
+  if (!sel || sel.rangeCount === 0) return;
+
+  const range = sel.getRangeAt(0);
+  if (startTag === '\\n') {
+    const br = document.createElement('br');
+    range.deleteContents();
+    range.insertNode(br);
+    range.setStartAfter(br);
+    range.setEndAfter(br);
+    sel.removeAllRanges();
+    sel.addRange(range);
+    contentDiv.focus();
+    return;
+  }
+
+  const wrapper = document.createElement('span');
+
+  switch (startTag) {
+    case '**':
+      wrapper.style.fontWeight = 'bold';
+      break;
+    case '__':
+      wrapper.style.textDecoration = 'underline';
+      break;
+    case '~~':
+      wrapper.style.textDecoration = 'line-through';
+      break;
+  }
+
+  if (!sel.isCollapsed) {
+    const selectedContent = range.extractContents();
+    wrapper.appendChild(selectedContent);
+    range.insertNode(wrapper);
+    range.selectNode(wrapper);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  } else {
+    range.insertNode(wrapper);
+    const newRange = document.createRange();
+    newRange.selectNodeContents(wrapper);
+    newRange.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(newRange);
+  }
+
+  contentDiv.focus();
+}
+
+// 폰트 사이즈 변경 함수
+function changeFontSize(size) {
+  const sel = window.getSelection();
+  if (!sel || sel.rangeCount === 0) return;
+
+  const range = sel.getRangeAt(0);
+  const wrapper = document.createElement('span');
+
+  if (size) wrapper.style.fontSize = size;
+
+  if (!sel.isCollapsed) {
+    const selectedContent = range.extractContents();
+    wrapper.appendChild(selectedContent);
+    range.insertNode(wrapper);
+    range.selectNode(wrapper);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  } else {
+    range.insertNode(wrapper);
+    const newRange = document.createRange();
+    newRange.selectNodeContents(wrapper);
+    newRange.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(newRange);
+  }
+
+  updateCurrentFontSize();
+}
+
+// 선택 영역의 현재 폰트 사이즈 추출
+function updateCurrentFontSize() {
+  const sel = window.getSelection();
+  const output = document.getElementById('currentFontSize');
+
+  if (sel && sel.rangeCount > 0) {
+    const node = sel.anchorNode;
+    if (node) {
+      let el = node.nodeType === 3 ? node.parentElement : node; // 텍스트노드면 부모로
+      const fontSize = window.getComputedStyle(el).fontSize;
+      output.textContent = `(${fontSize})`;
+    }
+  }
+}
+
+// 선택이 바뀔 때마다 폰트 사이즈 표시 업데이트
+document.addEventListener('selectionchange', updateCurrentFontSize);
+
+
+  </script>
+
+
   <script src="write.js"></script>
 </body>
 </html>

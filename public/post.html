@@ -1,21 +1,43 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+  <link rel="icon" href="img/favicon.png" type="image/png">
   <meta charset="UTF-8">
   <title>글 보기</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="post.css">
 </head>
 <body>
   <div class="container">
     <h2 id="postTitle"></h2>
-    <p><strong id="postAuthor"></strong> | <span id="postTime"></span></p>
-    <form id="deleteForm">
-      <button class="delete-button" data-id="POST_ID">삭제</button>
-    </form>
+    <p><strong id="postAuthor"></strong></span> | <span id="postTime"></span></p>
     <p id="postContent"></p>
-    <img id="postImage" style="max-width: 300px;"><br><br>
+    <img id="postImage"><br><br>
+    <form id="deleteForm">
+      <button type="submit">삭제</button>
+    </form>
+    
     <a href="index.html" class="back">← 목록으로</a>
   </div>
+  <hr>
+  <div class="comments-section">
+    <h3>댓글</h3>
+  
+    <form id="commentForm">
+      <div class ="topbar">
+      <input type="text" id="commentAuthor" placeholder="이름" required>
+      <input type="text" id="commentPassword" placeholder="비밀번호">
+      </div>
+      <input type="text" id="commentContent" placeholder="여기에 댓글 입력" required>
+      <button type="submit">댓글 작성</button>
+    </form>
+    <ul id="commentList"></ul>
+
+    <ul id="commentList"></ul>
+
+
+  </div>
+
+
   <script src="post.js"></script>
 </body>
 </html>
