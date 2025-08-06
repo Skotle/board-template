@@ -77,6 +77,38 @@ hr {
   margin: 40px 0;
 }
 
+
+/* 추천 영역 부모에 flex 스타일 */
+p#recommendSection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1rem;
+  margin: 10px 0;
+}
+
+#postRecommendCount {
+  font-weight: bold;
+  color: #e74c3c;
+}
+
+#recommendBtn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+#recommendBtn:hover {
+  background-color: #2980b9;
+}
+
+
+
 /* 댓글 영역 */
 .comments-section {
   max-width: 720px;
@@ -139,6 +171,10 @@ input[type="text"] {
 #commentList li {
   padding: 12px;
   border-bottom: 1px solid #eee;
+}
+
+.comment-ip{
+  color:rgb(154,154,154);
 }
 
 @media screen and (max-width: 600px) {

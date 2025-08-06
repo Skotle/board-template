@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           ${commentHTML}
         </div>
         <div class="post-meta">
-          <span class="post-author">${post.author}</span> • ${post.time} • 조회수 ${post.views ?? 0}
+          <span class="post-author">${post.author}</span> • ${post.time} • 조회수 ${post.views ?? 0} • 추천 ${post.recommend ?? 0}
         </div>
       `;
 

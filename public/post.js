@@ -13,6 +13,8 @@ async function getIpFrontPart() {
   }
 }
 
+
+
 // URL에서 게시글 ID 추출 (전역으로 한 번만)
 const id = new URLSearchParams(location.search).get('id');
 if (!id) {
@@ -37,6 +39,7 @@ function escapeHtml(text) {
   const contentEl = document.getElementById('postContent');
   const imageEl = document.getElementById('postImage');
   const deleteForm = document.getElementById('deleteForm');
+  const recommendcount = document.getElementById("postRecommendCount");
 
   let post = null;
 
@@ -47,9 +50,12 @@ function escapeHtml(text) {
 
     titleEl.textContent = post.title;
     authorEl.textContent = post.author + (post.ip ? ` (${post.ip})` : '');
-    timeEl.textContent = post.time;
+    if (post.ip) {
+      authorEl.innerHTML = `${post.author} <span class="postIp" style="color:rgb(154,154,154);">(${post.ip})</span>`;
+    }
+    timeEl.innerHTML = `${post.time} | 조회수 <span class="postViews">${post.views}</span>`;
     contentEl.innerHTML = post.content.replace(/\n/g, '<br>');
-
+    recommendcount.innerHTML = `<p>${post.recommend ?? 0}</p>`;
     if (post.image) {
       imageEl.src = post.image;
       imageEl.style.display = 'block';
@@ -430,3 +436,34 @@ document.getElementById("commentList").addEventListener("click", (e) => {
     commentLi.appendChild(form);
   }
 });
+
+document.getElementById('recommendBtn').addEventListener('click', async () => {
+  try {
+    const res = await fetch(`/posts/${id}/recommend`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ uid: 'abc123',ip:ipFront }) // uid는 필요 시 포함
+    });
+
+    const data = await res.json(); // 항상 먼저 JSON 파싱
+
+    if (!res.ok) {
+      if (data.error === '이미 추천하셨습니다.') {
+        alert('이미 추천하셨습니다.');
+      } else {
+        alert(`추천 실패: ${data.error || '알 수 없는 오류'}`);
+      }
+      return;
+    }
+
+    // 성공 시
+    console.log('추천 성공', data);
+    document.getElementById('postRecommendCount').textContent = data.recommend;
+  } catch (err) {
+    console.error('추천 요청 중 오류 발생:', err);
+    alert('서버 오류가 발생했습니다.');
+  }
+});
+

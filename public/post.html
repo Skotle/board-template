@@ -3,6 +3,7 @@
 <head>
   <link rel="icon" href="img/favicon.png" type="image/png">
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>글 보기</title>
   <link rel="stylesheet" href="post.css">
 </head>
@@ -17,7 +18,13 @@
     </form>
     
     <a href="index.html" class="back">← 목록으로</a>
+    <p id="recommendSection" style="margin-top:50px;">
+      추천: <span id="postRecommendCount"></span>
+      <button id="recommendBtn">추천하기</button>
+    </p>
   </div>
+
+<p id="postContent"></p>
   <hr>
   <div class="comments-section">
     <h3>댓글</h3>

@@ -9,6 +9,83 @@
     "images": [],
     "time": "2025. 8. 5. 오후 7:20:17",
     "ip": "221.140",
-    "views": 7
+    "views": 75,
+    "recommend": 1,
+    "comments": [
+      {
+        "id": "ef07d250-eabe-4762-a05f-07638dcc333e",
+        "author": "ㅇㅇ",
+        "content": "이재명만세",
+        "time": "2025. 8. 6. 오전 10:14:32",
+        "password": "1234",
+        "uid": "",
+        "ip": "221.140",
+        "replies": []
+      },
+      {
+        "id": "1b7e02da-21e0-4f3d-9df3-608c4854dec6",
+        "author": "ㅇㅂ",
+        "content": "ㅇㅇ",
+        "time": "2025. 8. 6. 오전 10:47:58",
+        "password": "1234",
+        "uid": "",
+        "ip": "221.140"
+      },
+      {
+        "id": "dd1cd3d5-9e9b-450f-a511-b574f9cf2277",
+        "author": "ㅇㅂ",
+        "content": "ㅇㅇ",
+        "time": "2025. 8. 6. 오전 10:47:58",
+        "password": "1234",
+        "uid": "",
+        "ip": "221.140"
+      },
+      {
+        "id": "03f9d9cd-0921-444c-a60a-c3287f5d64f9",
+        "author": "ㅇㅇ",
+        "content": "ㅇㅂ",
+        "time": "2025. 8. 6. 오전 10:48:07",
+        "password": "1234",
+        "uid": "",
+        "ip": "221.140"
+      }
+    ],
+    "recommendedIps": [
+      "127.0.0.1"
+    ]
+  },
+  {
+    "id": "95734059-d521-4528-8bd8-c78f43f82a85",
+    "author": "ㅇㅇ",
+    "title": "나는 이재명이다",
+    "content": "<img src=\"/uploads/1754446715409-753484371.png\" alt=\"첨부된 이미지\" style=\"max-width: 100%;\">",
+    "password": "1234",
+    "category": "default",
+    "images": [],
+    "time": "2025. 8. 6. 오전 11:18:37",
+    "view": 0,
+    "ip": "221.140",
+    "views": 12,
+    "recommendedIps": [
+      "127.0.0.1",
+      "221.140"
+    ],
+    "recommend": 2
+  },
+  {
+    "id": "ba01cf23-bb05-41cf-b3e2-0025ffdea274",
+    "author": "슨일",
+    "title": "운지",
+    "content": "ㅇㅇ",
+    "category": "default",
+    "images": [],
+    "time": "2025. 8. 6. 오전 11:29:00",
+    "view": 0,
+    "usid": "skotle989",
+    "views": 5,
+    "recommendedIps": [
+      "221.140"
+    ],
+    "recommend": 10
   }
 ]

@@ -5,6 +5,7 @@ const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 
 const app = express();
+const https = require('https');
 const PORT = 80;
 
 const upload = multer({
@@ -16,7 +17,6 @@ const upload = multer({
     fields: 20                  // 최대 필드 개수
   }
 });
-
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -364,6 +364,45 @@ app.delete('/posts/:postId/comment/:commentId', (req, res) => {
   res.sendStatus(200);
 });
 
+
+
+// posts는 게시글 리스트
+// req.body.ip: 추천 요청자의 IP 주소
+// req.params.id: 추천할 게시글 ID
+
+app.post('/posts/:id/recommend', (req, res) => {
+  const postId = req.params.id;
+  const userIp = req.body.ip || req.ip;  // 👈 클라이언트가 보낸 ip가 우선
+
+  let posts;
+  try {
+    posts = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
+  } catch (err) {
+    console.error('게시글 파일 읽기 실패:', err);
+    return res.status(500).json({ error: '서버 내부 오류' });
+  }
+
+  const post = posts.find(p => p.id === postId);
+  if (!post) return res.status(404).json({ error: '게시글이 없습니다.' });
+
+  post.recommendedIps = post.recommendedIps || [];
+
+  if (post.recommendedIps.includes(userIp)) {
+    return res.status(400).json({ error: '이미 추천하셨습니다.' });
+  }
+
+  post.recommend = (post.recommend || 0) + 1;
+  post.recommendedIps.push(userIp);
+
+  try {
+    fs.writeFileSync(DATA_FILE, JSON.stringify(posts, null, 2));
+  } catch (err) {
+    console.error('추천 저장 실패:', err);
+    return res.status(500).json({ error: '파일 저장 실패' });
+  }
+
+  return res.json({ recommend: post.recommend });
+});
 
 
 
