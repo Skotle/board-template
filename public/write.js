@@ -1,223 +1,221 @@
-// DOM 요소 참조
-const contentDiv = document.getElementById('content');
-const imageInput = document.getElementById('image');
-const postForm = document.getElementById('postForm');
-
-// 로그인 상태 및 IP 앞부분 (예: 이 부분은 실제 앱에 맞게 수정 필요)
+// ===== 전역 변수 =====
+let ID = null;
+let username = null;
+let authority = null;
+let loggedIn = false;
 let ipFront = null;
 
+// ===== 로그인 상태 확인 =====
+async function checkLogin() {
+  try {
+    const res = await fetch("/api/check-login", { method: "GET", credentials: "include" });
+    if (!res.ok) { loggedIn = false; return false; }
+    const data = await res.json();
+    loggedIn = !!data.loggedIn;
+    username = data.username || null;
+    authority = data.authority || null;
+    ID = data.ID || null;
+    return loggedIn;
+  } catch (err) {
+    console.error("로그인 상태 확인 오류:", err);
+    loggedIn = false;
+    return false;
+  }
+}
+
+// ===== 로그인 UI 처리 =====
+function updateUIByLogin() {
+  const authOnlyElements = document.querySelectorAll('.auth-only');
+  const passwordInput = document.getElementById('password');
+  if (loggedIn) {
+    authOnlyElements.forEach(el => { el.style.display = 'none'; el.disabled = true; el.removeAttribute('required'); });
+    if (passwordInput) { passwordInput.style.display = 'none'; passwordInput.disabled = true; passwordInput.removeAttribute('required'); }
+  } else {
+    authOnlyElements.forEach(el => { el.style.display = 'inline-block'; el.disabled = false; el.setAttribute('required', 'true'); });
+    if (passwordInput) { passwordInput.style.display = 'block'; passwordInput.disabled = false; passwordInput.setAttribute('required', 'true'); }
+  }
+}
+
+// ===== IP 앞부분 가져오기 (비로그인 시) =====
 async function getIpFrontPart() {
   try {
-    const response = await fetch('https://api.ipify.org?format=json');
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-    const data = await response.json();
-    const ipParts = data.ip.split('.');
-    return ipParts.slice(0, 2).join('.');
-  } catch (error) {
-    console.error('IP를 가져오는 데 실패했습니다:', error);
+    const res = await fetch('https://api.ipify.org?format=json');
+    const data = await res.json();
+    return data.ip.split('.').slice(0,2).join('.');
+  } catch (err) {
+    console.error('IP 가져오기 실패:', err);
     return null;
   }
 }
 
-// IP 앞부분 얻기
-getIpFrontPart().then(front => { ipFront = front; });
-
-// 이미지 다중 삽입: 선택한 이미지 파일을 읽어 contenteditable div 커서 위치에 삽입
-imageInput.addEventListener('change', async (e) => {
-  const files = e.target.files;
-  if (!files.length) return;
-
-  const formData = new FormData();
-  for (const file of files) {
-    formData.append('images', file);
-  }
-  
-  try {
-    const response = await fetch('/upload-images', {
-      method: 'POST',
-      body: formData
-    });
-
-    const result = await response.json();
-
-    if (response.ok && result.urls) {
-      for (const url of result.urls) {
-        insertImageAtCursor(url); // base64 → URL 삽입으로 변경됨
-      }
-    } else {
-      alert('이미지 업로드 실패: ' + result.message);
-    }
-  } catch (err) {
-    console.error('업로드 에러:', err);
-    alert('이미지 업로드 중 오류가 발생했습니다.');
-  }
-  
-  e.target.value = ''; // input 초기화
-});
-
-
-document.addEventListener("DOMContentLoaded", function () {
-  const token = localStorage.getItem("accessToken");
-  const authOnlyElements = document.querySelectorAll(".auth-only");
-  const passwordInput = document.getElementById("password");
-
-  if (token) {
-    // 로그인 상태 → 닉네임, 비밀번호 숨김
-    authOnlyElements.forEach(el => {
-      el.style.display = "none";
-      el.disabled = true;
-      el.removeAttribute("required");
-    });
-    if (passwordInput) {
-      passwordInput.style.display = "none";
-      passwordInput.disabled = true;
-      passwordInput.removeAttribute("required");
-    }
-  } else {
-    // 비로그인 상태 → 닉네임, 비밀번호 보임
-    authOnlyElements.forEach(el => {
-      el.style.display = "block";  // block 또는 inline-block, CSS에 맞게 조절
-      el.disabled = false;
-      el.setAttribute("required", "true");
-    });
-    if (passwordInput) {
-      passwordInput.style.display = "block";
-      passwordInput.disabled = false;
-      passwordInput.setAttribute("required", "true");
-    }
-  }
-});
-
-
-// contenteditable div 커서 위치에 이미지 삽입 함수
-function insertImageAtCursor(imageSrc) {
+// ===== 커서 위치 이미지 삽입 =====
+function insertImageAtCursor(url) {
   const sel = window.getSelection();
   if (!sel || sel.rangeCount === 0) {
-    contentDiv.focus();
+    const editor = document.getElementById('content');
+    editor.focus();
+    const newSel = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(editor);
+    range.collapse(false);
+    newSel.removeAllRanges();
+    newSel.addRange(range);
   }
-  const range = sel.getRangeAt(0);
-
+  const range = window.getSelection().getRangeAt(0);
   const img = document.createElement('img');
-  img.src = imageSrc;
-  img.style.maxWidth = '100%';
-  img.alt = '첨부된 이미지';
-
-  range.deleteContents();
+  img.src = url; img.style.maxWidth = '100%';
   range.insertNode(img);
-
-  // 커서를 이미지 뒤로 이동
-  range.setStartAfter(img);
-  range.setEndAfter(img);
-  sel.removeAllRanges();
-  sel.addRange(range);
-
-  contentDiv.focus();
 }
 
-// 폼 제출 이벤트 처리
-postForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
+// ===== 커서 위치 오디오 삽입 =====
+function insertAudioAtCursor(url) {
+  const sel = window.getSelection();
+  if (!sel || sel.rangeCount === 0) document.getElementById('content').focus();
+  const range = sel.getRangeAt(0);
+  const audio = document.createElement('audio');
+  audio.controls = true; audio.src = url; audio.style.display = 'block'; audio.style.marginTop = '10px';
+  range.deleteContents();
+  range.insertNode(audio);
+  range.setStartAfter(audio); range.setEndAfter(audio);
+  sel.removeAllRanges(); sel.addRange(range);
+  document.getElementById('content').focus();
+}
 
-  // 로그인 토큰, 닉네임 등 로컬스토리지에서 불러오기 (필요 시 앱에 맞게 수정)
-  const token = localStorage.getItem("accessToken");
+// ===== 유튜브 및 URL 자동 변환 =====
+function convertContentLinks(contentDiv) {
+  const html = contentDiv.innerHTML;
 
-  const formData = new FormData();
+  // 유튜브 변환
+  const youtubePattern = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w\-]{11})/g;
+  let replaced = html.replace(youtubePattern, (m,id) => `<iframe width="560" height="315" src="https://www.youtube.com/embed/${id}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`);
 
-  if (token) {
-    const username = localStorage.getItem("username") || "익명";
-    const userID = localStorage.getItem("ID") || "";
-    formData.append("author", username);
-    formData.append("sign", userID);
-  } else {
-    const author = document.getElementById('author').value.trim();
-    const passwordInput = document.getElementById('password');
-    const password = passwordInput ? passwordInput.value.trim() : '';
+  // 일반 URL
+  const urlPattern = /(?<!["'>])(https?:\/\/[^\s<]+)/g;
+  replaced = replaced.replace(urlPattern, '<a href="$1" target="_blank">$1</a>');
 
-    if (!author) {
-      alert('닉네임을 입력해주세요.');
-      return;
-    }
-    if (!password) {
-      alert('비밀번호를 입력해주세요.');
-      return;
-    }
-
-    formData.append('author', author);
-    formData.append('password', password);
-    formData.append('nosign', ipFront || '');
+  if (contentDiv.innerHTML !== replaced) {
+    contentDiv.innerHTML = replaced;
+    const range = document.createRange();
+    const sel = window.getSelection();
+    range.selectNodeContents(contentDiv);
+    range.collapse(false);
+    sel.removeAllRanges(); sel.addRange(range);
   }
+}
 
-  const title = document.getElementById('title').value.trim();
-  if (!title) {
-    alert('제목을 입력해주세요.');
-    return;
-  }
+// ===== DOMContentLoaded =====
+document.addEventListener('DOMContentLoaded', async () => {
+  const contentDiv = document.getElementById('content');
+  const imageInput = document.getElementById('image');
+  const postForm = document.getElementById('postForm');
+  const categorySelect = document.getElementById('category');
 
-  const contentHTML = contentDiv.innerHTML.trim();
-  if (!contentHTML) {
-    alert('본문 내용을 입력하세요.');
-    contentDiv.focus();
-    return;
-  }
+  loggedIn = await checkLogin();
+  updateUIByLogin();
+  if (!loggedIn) ipFront = await getIpFrontPart();
 
-  formData.append('title', title);
-  formData.append('content', contentHTML);
-  formData.append('category', document.getElementById('category').value);
+  // 게시판 이름 추출
+  const params = new URLSearchParams(location.search);
+  const boardName = params.get('board');
+  if (!boardName) { alert('게시판 정보가 없습니다.'); return; }
 
-  // 이미지 여러 개 파일폼에 추가
-  const imageFiles = imageInput.files;
-  for (const file of imageFiles) {
-    formData.append('images', file);
-  }
-
+  // 카테고리 로드
   try {
-    const res = await fetch('/posts', {
-      method: 'POST',
-      body: formData
+    const res = await fetch(`/board/${encodeURIComponent(boardName)}/posts`);
+    const data = await res.json();
+    categorySelect.innerHTML = '';
+    const defaultOption = document.createElement('option');
+    defaultOption.value=''; defaultOption.textContent='카테고리 선택';
+    categorySelect.appendChild(defaultOption);
+    Object.entries(data.post_category || {}).forEach(([id,name]) => {
+      const opt = document.createElement('option');
+      opt.value = id; opt.textContent = name;
+      categorySelect.appendChild(opt);
     });
+  } catch(err){ console.error('카테고리 로드 실패:', err); }
 
-    if (res.ok) {
-      alert('작성 완료!');
-      window.location.href = 'index.html';
-    } else {
-      const errorText = await res.text();
-      alert('작성 실패: ' + errorText);
-    }
-  } catch (err) {
-    alert('통신 오류: ' + err.message);
-  }
-});
+  // content input 이벤트
+  contentDiv.addEventListener('input', () => convertContentLinks(contentDiv));
 
-async function uploadImages() {
-  const input = document.getElementById('imageInput');
-  const files = input.files;
-
+  // 이미지 업로드
+  imageInput.addEventListener('change', async e => {
+  const files = e.target.files; 
   if (!files.length) return;
 
   const formData = new FormData();
-  for (let file of files) {
-    formData.append('images', file);
-  }
-
+  for (const f of files) formData.append('images', f); // 서버와 동일하게 'images' // 서버에서 'files'로 받도록 통일
   try {
-    const response = await fetch('/upload-images', {
-      method: 'POST',
-      body: formData
-    });
-
-    const result = await response.json();
-
-    if (response.ok && result.urls) {
-      const contentEl = document.getElementById('content');
-      for (const url of result.urls) {
-        contentEl.value += `<img src="${url}" style="max-width:100%;"><br>\n`;
-      }
-    } else {
-      alert('이미지 업로드 실패: ' + result.message);
-    }
-  } catch (err) {
-    console.error('업로드 에러:', err);
-    alert('이미지 업로드 중 오류가 발생했습니다.');
+    const res = await fetch('/uploads', { method:'POST', body: formData });
+    const result = await res.json();
+    if (res.ok && result.urls) result.urls.forEach(url => insertImageAtCursor(url));
+    else alert('업로드 실패: '+(result.message||''));
+  } catch(err){
+    console.error(err);
+    alert('업로드 오류');
   }
-}
+  e.target.value = '';
+});
+
+
+  // 오디오 녹음
+  let mediaRecorder, recordedChunks=[];
+  document.getElementById('startRecord').addEventListener('click', async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+      mediaRecorder = new MediaRecorder(stream); recordedChunks=[];
+      mediaRecorder.ondataavailable = e => { if(e.data.size>0) recordedChunks.push(e.data); };
+      mediaRecorder.onstop = async () => {
+        const blob = new Blob(recordedChunks,{type:'audio/webm'});
+        const formData = new FormData();
+        formData.append('audio', blob, 'recording.webm');
+        try {
+          const res = await fetch('/upload-audio',{method:'POST',body:formData});
+          const result = await res.json();
+          if(res.ok && result.url) insertAudioAtCursor(result.url);
+          else alert('오디오 업로드 실패: '+(result.message||''));
+        } catch(err){ console.error(err); alert('오디오 업로드 오류'); }
+      };
+      mediaRecorder.start();
+      document.getElementById('startRecord').disabled = true;
+      document.getElementById('stopRecord').disabled = false;
+    } catch(err){ alert('마이크 접근 불가'); console.error(err); }
+  });
+  document.getElementById('stopRecord').addEventListener('click', () => {
+    mediaRecorder.stop();
+    document.getElementById('startRecord').disabled=false;
+    document.getElementById('stopRecord').disabled=true;
+  });
+
+  // 글 작성
+  postForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    const title = document.getElementById('title').value.trim();
+    const contentHTML = contentDiv.innerHTML.trim();
+    const category = categorySelect.value || '';
+
+    if(!title){ alert('제목 입력'); return; }
+    if(!contentHTML){ alert('본문 입력'); contentDiv.focus(); return; }
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('content', contentHTML);
+    formData.append('category', category);
+
+    if(loggedIn){ formData.append('author', username); formData.append('uid', ID); }
+    else {
+      const author = document.getElementById('author').value.trim();
+      const password = document.getElementById('password').value.trim();
+      if(!author || !password){ alert('닉네임/비밀번호 입력'); return; }
+      formData.append('author', author); formData.append('password', password); formData.append('ipFront', ipFront||'');
+    }
+
+    const imageFiles = imageInput.files;
+    for(const f of imageFiles) formData.append('images', f);
+
+    try {
+      const res = await fetch(`/board/${encodeURIComponent(boardName)}/posts`, { method:'POST', body:formData });
+      if(res.ok){ alert('작성 완료'); location.href=`board.html?board=${encodeURIComponent(boardName)}`; }
+      else { const errText = await res.text(); alert('작성 실패: '+errText); }
+    } catch(err){ console.error(err); alert('서버 통신 오류'); }
+  });
+});

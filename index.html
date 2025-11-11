@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>로그인 상태 예시</title>
+  <style>
+    #userArea { display: none; }
+    #loginArea { display: none; }
+  </style>
+</head>
+<body>
+  <div id="loginArea">
+    <h2>로그인</h2>
+    <input type="text" id="username" placeholder="아이디">
+    <input type="password" id="password" placeholder="비밀번호">
+    <button id="loginBtn">로그인</button>
+  </div>
+
+  <div id="userArea">
+    <h2>환영합니다, <span id="welcomeName"></span>님!</h2>
+    <button id="logoutBtn">로그아웃</button>
+  </div>
+
+  <script>
+    const tokenKey = "token";
+
+    // ✅ 로그인 상태 확인 함수
+    async function checkLoginStatus() {
+      const token = localStorage.getItem(tokenKey);
+      if (!token) {
+        showLoginUI();
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/auth/validate", {
+          headers: { "Authorization": `Bearer ${token}` }
+        });
+        if (!res.ok) throw new Error("Invalid token");
+        const data = await res.json();
+        showUserUI(data.user.username);
+      } catch {
+        localStorage.removeItem(tokenKey);
+        showLoginUI();
+      }
+    }
+
+    // ✅ 로그인 요청
+    document.getElementById("loginBtn").addEventListener("click", async () => {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        localStorage.setItem(tokenKey, data.token);
+        checkLoginStatus();
+      } else {
+        alert("로그인 실패");
+      }
+    });
+
+    // ✅ 로그아웃
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.removeItem(tokenKey);
+      showLoginUI();
+    });
+
+    // ✅ UI 전환 함수
+    function showLoginUI() {
+      document.getElementById("loginArea").style.display = "block";
+      document.getElementById("userArea").style.display = "none";
+    }
+    function showUserUI(username) {
+      document.getElementById("loginArea").style.display = "none";
+      document.getElementById("userArea").style.display = "block";
+      document.getElementById("welcomeName").textContent = username;
+    }
+
+    // 페이지 로드 시 로그인 상태 확인
+    checkLoginStatus();
+  </script>
+</body>
+</html>

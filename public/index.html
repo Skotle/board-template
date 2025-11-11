@@ -1,60 +1,58 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>임시게시판</title>
-  <link rel="stylesheet" href="index.css">
+  <meta charset="UTF-8" />
+  <title>메인</title>
+  <link rel="icon" href="img/favicon.png" type="image/png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="styles/index.css" rel="stylesheet">
+  <link href="styles/top_bar.css" rel="stylesheet">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2102648357013948"
+     crossorigin="anonymous"></script>
 </head>
 <body>
-  <div class="container">
-    <header class="auth-area">
-      <span id="welcome" class="welcome-text" style="display:none;"></span>
-      <a href="login.html" id="loginLink" class="auth-link">로그인</a>
-      <a href="newsign.html" id="newsign" class="auth-link">가입</a>
-      <button id="logoutBtn" class="auth-btn" style="display:none;">로그아웃</button>
-    </header>
-
-    <h1 class="board-title">임시게시판</h1>
-    <div class="top-bar">
-      <a href="write.html" class="write-btn">글쓰기</a>
-    </div>
-
-    <ul id="postList" class="post-list">
-      <!-- 게시글 항목이 JS로 동적으로 삽입됩니다 -->
-    </ul>
+  <div class="top-right-auth">
+    <a href="/login.html" id="login">로그인</a> |
+    <a href="/newsign.html" id="newsign">가입</a>
   </div>
 
-  <script>
-    const token = localStorage.getItem("accessToken");
-    const username = localStorage.getItem("username");
-    const loginLink = document.getElementById("loginLink");
-    const newsign = document.getElementById("newsign");
-    const logoutBtn = document.getElementById("logoutBtn");
-    const welcome = document.getElementById("welcome");
+  <!-- 상단 가로 배너 -->
+  <div class="header-banner">
+    <div class="banner-left">
+      <img src="img/botjebbi.png" alt="로고" class="banner-logo">
+      <div class="banner-text">
+        <h2>irisen25.com</h2>
+        <p>botjebi archive</p>
+      </div>
+    </div>
 
-    if (token && username) {
-      loginLink.style.display = "none";
-      newsign.style.display = "none";
-      logoutBtn.style.display = "inline-block";
-      welcome.style.display = "inline-block";
-      welcome.textContent = `환영합니다, ${username}님`;
-    } else {
-      newsign.style.display = "inline-block";
-      loginLink.style.display = "inline-block";
-      logoutBtn.style.display = "none";
-      welcome.style.display = "none";
-    }
+    <div class="banner-right">
+      <input type="text" placeholder="게시판 검색..." class="banner-search">
+      <button class="search-btn">검색</button>
+    </div>
+  </div>
 
-    logoutBtn.addEventListener("click", () => {
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      localStorage.removeItem("username");
-      localStorage.removeItem("ID");
-      alert("로그아웃 되었습니다.");
-      window.location.reload();
-    });
-  </script>
+  <div class="top-bar">
+    <div class="leftbox">
+      <a href="/">홈</a>
+      <a href="boards.html">보드</a>
+      <a href="social.html">소셜</a>
+      <a href="add-board">추가</a>
+    </div>
+    <div class="logbox">
+      <span id="welcome" class="welcome-text" style="display:none;"></span>
+      <button id="logoutBtn" class="auth-btn" style="display:none;">로그아웃</button>
+      <button id="profileBtn" class="btn-ao" style="display: none;">프로필</button>
+    </div>
+  </div>
 
-  <script src="index.js"></script>
+  <div class="log-bar"></div>
+
+  <h3>irisen main</h3>
+  <ul id="mainPostList"></ul>
+
+  <script src="index.js" defer></script>
+  <script src="logboard.js" defer></script>
 </body>
 </html>
+

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>사용자 프로필</title>
+  <link href="profile.css" rel="stylesheet">
+</head>
+<body>
+  <a href="/">돌아가기</a>
+  <div class="profile-card">
+    <img id="profileImage" src="/img/default_profile.png" alt="프로필 이미지" style="width:150px; height:150px; border-radius:50%;">
+
+    <h2 id="username">로딩중...</h2>
+    <p id="statusMessage"></p>
+    <p><strong>가입일:</strong> <span id="joinDate"></span></p>
+    <p><strong>최근 활동:</strong> <span id="lastLogin"></span></p>
+    <p><strong>기록:</strong> 글 <span id="postCount"></span>개 / 댓글 <span id="commentCount"></span>개</p>
+    <p><strong>소개:</strong> <span id="bio"></span></p>
+    <button id="editBtn" style="display:none;">수정</button>
+    <hr>
+<h3>활동 내역</h3>
+<div id="activityList">
+  로딩중...
+</div>
+
+  </div>
+
+  <script src="profile.js"></script>
+</body>
+</html>

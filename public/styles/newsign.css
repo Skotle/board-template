@@ -1,0 +1,135 @@
+/* 기본 폼 스타일 */
+form {
+  max-width: 400px;
+  margin: 40px auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  font-weight: 600;
+  color: #333;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+  width: calc(100% - 10px);
+  padding: 6px 5px;
+  font-size: 1rem;
+  margin-top: 5px;
+  border: 1.5px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus {
+  border-color: #2d79c7;
+  outline: none;
+}
+
+/* 버튼 스타일 */
+button {
+  margin-left: 6px;
+  padding: 5px 10px;
+  font-size: 0.9rem;
+  background-color: #2d79c7;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover:not(:disabled) {
+  background-color: #1b4f8c;
+}
+
+button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+/* 상태 메시지 */
+span {
+  margin-left: 8px;
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+/* 비밀번호 토글 버튼 스타일 */
+.password-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 60px;
+  box-sizing: border-box;
+}
+
+.toggle-password-btn {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #555;
+  user-select: none;
+}
+
+.toggle-password-btn:hover {
+  color: #2d79c7;
+}
+
+/* 로딩 스피너 스타일 */
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 3px solid #ccc;
+  border-top-color: #2d79c7;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  vertical-align: middle;
+  margin-left: 8px;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #2d79c7;
+  padding: 10px 20px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.top-bar a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1em;
+}
+
+.top-bar a:hover {
+  text-decoration: underline;
+}
+
+.logbox a{
+  margin: 10px;
+}
+
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

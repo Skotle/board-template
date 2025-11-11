@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>temp page</title>
+  <link rel="stylesheet" href="profile-edit.css">
+</head>
+<body>
+  <h2></h2>
+
+  <form id="editForm">
+  <label>별명 : <input type="text" name="statusMessage"></label><br>
+  <label>소개 : <textarea name="bio"></textarea></label><br>
+  <label>프로필 이미지: <input type="file" name="profileImage" accept="image/*"></label><br>
+  <div style="width:400px; height:400px;">
+    <img id="preview" style="max-width:100%; display:block;" />
+  </div>
+  <button type="submit">저장</button>
+</form>
+
+<!-- Cropper.js CSS/JS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+
+
+  <script src="profile-edit.js"></script>
+</body>
+</html>

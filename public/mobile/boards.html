@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>irisen - 모바일</title>
+  <link rel="icon" href="/img/favicon.png" type="image/png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="/styles/mobile.css" rel="stylesheet">
+
+  <!-- 광고 스크립트 -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2102648357013948"
+     crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="top-right-auth">
+    <a href="/login.html" id="login">로그인</a> |
+    <a href="/newsign.html" id="newsign">가입</a>
+  </div>
+
+  <div class="header-banner">
+    <div class="banner-left">
+      <img src="/img/banner_logo.png" alt="로고" class="banner-logo">
+      <div class="banner-text">
+        <h2>irisen25.com</h2>
+        <p>popolion archive</p>
+      </div>
+    </div>
+    <div class="banner-right">
+      <input type="text" placeholder="게시판 검색..." class="banner-search">
+      <button class="search-btn">검색</button>
+    </div>
+  </div>
+
+  <div class="top-bar">
+    <div class="leftbox">
+      <a href="/">홈</a>
+      <a href="/boards.html">보드</a>
+      <a href="/social.html">소셜</a>
+      <a href="/add-board">추가</a>
+    </div>
+    <div class="logbox">
+      <span id="welcome" class="welcome-text" style="display:none;"></span>
+      <button id="logoutBtn" class="auth-btn" style="display:none;">로그아웃</button>
+      <button id="profileBtn" class="btn-ao" style="display:none;">프로필</button>
+    </div>
+  </div>
+
+  <div id="visited-boards-container"></div>
+
+  <h3>irisen main</h3>
+  <ul id="mainPostList"></ul>
+
+  <!-- 기존 JS 그대로 사용 -->
+  <script src="/js/index.js"></script>
+  <script src="/js/logboard.js"></script>
+</body>
+</html>

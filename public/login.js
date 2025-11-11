@@ -1,33 +1,29 @@
 async function login() {
-  const id = document.getElementById("id").value;
+  const userID = document.getElementById("userID").value;
   const password = document.getElementById("password").value;
   const message = document.getElementById("message");
 
   try {
-    const response = await fetch("https://irisen-com.onrender.com/login", {
+    const response = await fetch("/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, password })
+      body: JSON.stringify({ userID, password }),
+      credentials: "include" // ✅ 쿠키 포함
     });
 
     const data = await response.json();
 
     if (response.ok) {
-      // 로그인 성공 시
-      localStorage.setItem("accessToken", data.accessToken);
-      localStorage.setItem("refreshToken", data.refreshToken);
-      localStorage.setItem("username", data.username); // 화면 표시용
-
+      // 스토리지에 토큰 저장 제거
       message.style.color = "green";
-      message.innerHTML = "로그인 성공!";
+      message.textContent = "로그인 성공!";
       window.location.href = "/";
     } else {
       message.style.color = "red";
-      message.innerHTML = data.message;
+      message.textContent = data.message;
     }
-  } catch (error) {
-    console.error("로그인 오류:", error);
+  } catch (err) {
     message.style.color = "red";
-    message.innerHTML = "서버와 연결할 수 없습니다.";
+    message.textContent = "서버와 연결할 수 없습니다.";
   }
 }

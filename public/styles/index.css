@@ -1,0 +1,280 @@
+@import url(common.css);
+
+/* 전체 초기화 및 기본 스타일 */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f6fa;
+  margin: 0;
+  padding: 20px;
+  color: #2f3640;
+  text-align: center;
+  /* width: 1200px;  
+  margin: 0 auto;  */
+}
+
+/* 제목 */
+h1 {
+  font-size: 2rem;
+  color: #353b48;
+  margin-bottom: 20px;
+}
+
+/* 게시판 목록 */
+/* 게시판 목록 - 콤팩트 스타일 */
+.board-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px auto;
+  max-width: 1000px;       /* 넓게 */
+  font-size: 0.9rem;       /* 글씨 작게 */
+  line-height: 1.4;
+  columns: 4;              /* 4열로 나누어 한 번에 */
+  column-gap: 20px;
+}
+
+.board-list li {
+  background: none;        /* 카드 배경 제거 */
+  box-shadow: none;        /* 그림자 제거 */
+  margin: 0 0 6px 0;       /* 간격 축소 */
+  padding: 2px 4px;        /* 패딩 최소화 */
+  border-radius: 0;        /* 모서리 둥글기 제거 */
+  font-weight: normal;     /* 굵기 일반화 */
+  color: #2f3640;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.board-list li:hover {
+  background: none;
+  color: #40739e;          /* hover 시 색상만 변경 */
+}
+
+
+
+#addBoardArea {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#newBoardName {
+  padding: 8px 12px;
+  width: 70%;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px 0 0 6px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+#addBoardBtn {
+  padding: 8px 16px;
+  font-size: 1rem;
+  border: none;
+  background-color: #44bd32;
+  color: white;
+  border-radius: 0 6px 6px 0;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+#addBoardBtn:hover {
+  background-color: #4cd137;
+}
+
+
+
+
+#mainPostList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+
+
+.post-item {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin: 0 auto 12px auto; /* 가운데 정렬 */
+  padding: 12px 15px;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.05);
+  transition: box-shadow 0.2s ease;
+
+  width: 90%;       /* 전체의 90% 너비 */
+  max-width: 800px; /* 최대 800px까지만 */
+}
+
+.post-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 좌우 공간 분배 */
+  gap: 10px; /* 요소 사이 간격 */
+}
+
+.post-board small {
+  color: #888;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.post-title a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1; /* 남는 공간 모두 차지 */
+}
+
+.post-comments {
+  color: #999;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+/* ==============================
+   모바일 전용 스타일
+   ============================== */
+/* ==============================
+   모바일 전용 스타일
+   ============================== */
+@media (max-width: 1024px) {
+  body {
+    padding: 10px 10px 100px;
+    text-align: left;
+  }
+
+  /* 게시판 목록 1열 */
+  .board-list {
+    columns: 1;
+    font-size: 0.95rem;
+    margin: 10px auto;
+  }
+
+  .board-list li {
+    margin-bottom: 8px;
+    padding: 6px 8px;
+  }
+
+  /* 메인 포스트 리스트 */
+  #mainPostList .post-item {
+    width: 100%;
+    padding: 8px 10px;
+  }
+
+  .post-box {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .post-title a {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: initial;
+  }
+
+  .post-board small,
+  .post-comments {
+    font-size: 0.8rem;
+  }
+
+  /* 상단 배너 모바일 대응 */
+  .header-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 8px;
+  }
+
+  .banner-left {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .banner-logo {
+    width: 40px;
+    height: 40px;
+  }
+
+  .banner-text h2 {
+    font-size: 1.2rem;
+  }
+
+  .banner-text p {
+    font-size: 0.85rem;
+  }
+
+  .banner-right {
+    margin-top: 8px;
+    display: flex;
+    width: 100%;
+    gap: 6px;
+  }
+
+  .banner-search {
+    flex: 1;
+    padding: 6px;
+    font-size: 0.9rem;
+  }
+
+  .search-btn {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+  }
+
+  /* 상단 바 메뉴 모바일 대응 */
+  .top-bar {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .top-bar .leftbox {
+    flex: 1 1 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-bottom: 8px;
+  }
+
+  .top-bar .leftbox a {
+    flex: 1 1 45%;
+    text-align: center;
+    margin-bottom: 6px;
+  }
+
+  .top-bar .logbox {
+    flex: 1 1 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .top-bar .logbox button,
+  .top-bar .logbox span {
+    flex: 1 1 45%;
+    margin: 4px 2.5%;
+    box-sizing: border-box;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  /* 상단 로그인/가입 링크 모바일 조정 */
+  .top-right-auth {
+    position: static;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 0.8rem;
+  }
+
+  .top-right-auth a {
+    margin: 0 5px;
+  }
+}

@@ -1,0 +1,129 @@
+@import url(common.css);
+
+/* 모바일 전용 기본 */
+body {
+  margin: 0;
+  font-family: 'Noto Sans KR', sans-serif;
+  background: #f9f9f9;
+  color: #333;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* 로그인 / 가입 */
+.top-right-auth {
+  text-align: center;
+  padding: 10px 0;
+}
+.top-right-auth a {
+  color: #1e1e1e;
+  text-decoration: none;
+  margin: 0 5px;
+}
+.top-right-auth a:hover {
+  text-decoration: underline;
+}
+
+/* 상단 배너 */
+.header-banner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  text-align: center;
+}
+.banner-logo {
+  width: 60px;
+  height: auto;
+  margin-bottom: 5px;
+}
+.banner-text h2 {
+  margin: 0;
+  font-size: 1.2em;
+}
+.banner-text p {
+  margin: 0;
+  font-size: 0.8em;
+  color: #777;
+}
+.banner-right {
+  margin-top: 5px;
+  display: flex;
+  width: 100%;
+  max-width: 300px;
+}
+.banner-search {
+  flex: 1;
+  padding: 6px;
+  border-radius: 4px 0 0 4px;
+  border: 1px solid #ccc;
+}
+.search-btn {
+  padding: 6px;
+  border-radius: 0 4px 4px 0;
+  border: none;
+  background: var(--main-blue);
+  color: #fff;
+  cursor: pointer;
+}
+
+/* 네비게이션 */
+.top-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--main-blue);
+  padding: 8px 0;
+}
+.top-bar .leftbox a {
+  color: #fff;
+  text-decoration: none;
+  padding: 5px 0;
+  display: block;
+}
+.top-bar .leftbox a:hover {
+  text-decoration: underline;
+}
+
+/* 최근 방문 */
+#visited-boards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 10px;
+  font-size: 0.8em;
+}
+
+/* 게시글 리스트 */
+#mainPostList {
+  list-style: none;
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.post-item {
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+.post-title a {
+  font-weight: bold;
+  color: #1e1e1e;
+  text-decoration: none;
+}
+.post-title a:hover {
+  color: #ff6b6b;
+}
+.post-board {
+  font-size: 0.75em;
+  color: #777;
+}
+
+/* 광고 iframe */
+ins, iframe {
+  max-width: 100%;
+  display: block;
+  margin: 0 auto;
+}

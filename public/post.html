@@ -1,21 +1,44 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+  <link rel="icon" href="img/favicon.png" type="image/png">
   <meta charset="UTF-8">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2102648357013948"
+     crossorigin="anonymous"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>글 보기</title>
-  <link rel="stylesheet" href="post.css">
+  <link rel="stylesheet" href="styles/post.css">
+  <link rel="stylesheet" href="styles/top_bar.css">
 </head>
 <body>
-  <div class="container">
-    <h2 id="postTitle"></h2>
-    <p><strong id="postAuthor"></strong></span> | <span id="postTime"></span></p>
-    <p id="postContent"></p>
-    <img id="postImage"><br><br>
-    <form id="deleteForm">
-      <button type="submit">삭제</button>
-    </form>
-    <a href="index.html" class="back">← 목록으로</a>
+  <div class="top-right-auth">
+    <a href="/login.html" id="login">로그인</a> |
+    <a href="/newsign.html" id="newsign">가입</a>
   </div>
+  <div class="top-bar">
+    <a href="index.html" id="back">←목록으로</a>
+    <div class="logbox">
+      <span id="welcome" class="welcome-text" style="display:none;"></span>
+      <button id="logoutBtn" class="auth-btn" style="display:none;">로그아웃</button>
+    </div>
+  </div>
+  <h1 id="boardName"></h1>
+  <div class="container">
+    <h2 id="postTitle" style="margin-bottom: 15px;"></h2>
+    <p><strong id="postAuthor"></strong></span> | <span id="postTime"></span> | <span id="postView"></span></p>
+    <p id="postContent"></p>
+    <form id="deleteForm" style="display: none;">
+      <button type="submit" id ="deletePassword">삭제</button>
+    </form>
+    
+  
+    <p id="recommendSection" style="margin-top:50px;">
+      추천: <span id="postRecommendCount"></span>
+      <button id="recommendBtn">추천하기</button>
+    </p>
+  </div>
+
+<p id="postContent"></p>
   <hr>
   <div class="comments-section">
     <h3>댓글</h3>
@@ -30,12 +53,31 @@
     </form>
     <ul id="commentList"></ul>
 
-    <ul id="commentList"></ul>
-
 
   </div>
+  <ul id="postList">여기에 표시</ul>
+  <script src="post/post.js"></script>
+  <script src="logboard.js"></script>
+  <script src="post/playload.js"></script>
+  <script src="post/loginif.js"></script>
+  <script>
+  const boards = JSON.parse(localStorage.getItem("visitedBoards") || "[]");
+
+const params = new URLSearchParams(window.location.search);
+const boardId = params.get("board");
+
+if (boardId) {
+  const match = boards.find(b => b.id === boardId);
+  if (match) {
+    const boardNameElem = document.getElementById("boardName");
+    if (boardNameElem) {
+      boardNameElem.textContent = match.board+" 게시판";
+    }
+  }
+}
+
+</script>
 
 
-  <script src="post.js"></script>
 </body>
 </html>

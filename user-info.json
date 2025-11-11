@@ -2,21 +2,90 @@
   {
     "userID": "skotle989",
     "username": "슨일",
-    "password": "a09ajdud21"
+    "password": "a09ajdud21",
+    "accessToken": "c67be68c-b255-4813-8cdf-d1991b52f727",
+    "refreshToken": "2b1053bd-87dd-440d-9e50-40448f9c8da1",
+    "authority": {
+      "admin": true
+    }
   },
   {
     "userID": "ofscotland",
     "username": "Skotle",
-    "password": "a09ajdud21"
+    "password": "a09ajdud21",
+    "accessToken": "19e1528c-9e96-4bd6-b01c-1f90afe63502",
+    "refreshToken": "35e1477c-37c6-4abe-b320-227305b3f55b",
+    "authority": {
+      "admin": false,
+      "boards": [
+        "kming"
+      ]
+    }
   },
   {
     "userID": "irisen",
     "username": "슨상님의일본",
-    "password": "a09ajdud21"
+    "password": "a09ajdud21",
+    "authority": {
+      "admin": false,
+      "boards": []
+    }
   },
   {
     "userID": "testUser01",
     "username": "ㅇㅇ(104.28)",
-    "password": "a09ajddu21"
+    "password": "a09ajddu21",
+    "authority": "default"
+  },
+  {
+    "userID": "kmingming",
+    "username": "케이밍밍",
+    "password": "min0302k104",
+    "authority": "default"
+  },
+  {
+    "userID": "mimiminu",
+    "username": "슨때잡",
+    "password": "mimiminu4717",
+    "authority": "admin",
+    "accessToken": "292e7656-48df-4d17-8b44-24a969cf3e0e",
+    "refreshToken": "2f7a727c-09df-47a6-a0c7-dfd45ace6414"
+  },
+  {
+    "userID": "dog101",
+    "username": "개",
+    "password": "krdog1234",
+    "authority": "default"
+  },
+  {
+    "userID": "tesatt",
+    "username": "이재명",
+    "password": "abb109ajf",
+    "authority": "default"
+  },
+  {
+    "userID": "saod",
+    "username": "자지",
+    "password": "a09ajdud21",
+    "authority": "default"
+  },
+  {
+    "userID": "siajf",
+    "username": "남원동",
+    "password": "ajfi30fni",
+    "authority": [
+      "default"
+    ]
+  },
+  {
+    "userID": "seis989",
+    "username": "narc",
+    "password": "aa-0020foa",
+    "email": "skotle989@gmail.com",
+    "authority": [
+      "음경"
+    ],
+    "accessToken": "1e5669a2-d895-4de8-9338-99d52a8725b6",
+    "refreshToken": "834247f2-33c8-4647-a152-3d0ddc2ac17d"
   }
 ]

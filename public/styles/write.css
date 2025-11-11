@@ -1,0 +1,119 @@
+@import url(common.css);
+
+/* 컨테이너 화면 거의 꽉 채우기 */
+.container {
+  width: 95vw;           /* 뷰포트 너비 95% 차지 */
+  max-width: 1200px;     /* 너무 커지지 않도록 최대 너비 제한 */
+  margin: 20px auto;     /* 위아래 여백 약간, 좌우 가운데 정렬 */
+  padding: 20px 30px;
+  box-sizing: border-box;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+}
+
+/* 이름, 비밀번호 입력 가로 배치 */
+.input-row {
+  display: flex;
+  gap: 20px;               /* 두 칸 사이 간격 */
+  margin-bottom: 20px;
+}
+
+/* 두 input 동일한 너비 */
+.input-row input {
+  flex: 1 1 0;
+  padding: 10px 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+/* title 등 다른 input, select는 full width */
+form input[type="text"]:not(.input-row input),
+form input[type="password"]:not(.input-row input),
+select#category {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* 본문 입력 영역 contenteditable */
+#content {
+  width: 100%;
+  min-height: 400px;
+  max-height: 600px;
+  border: 1px solid #ccc;
+  padding: 10px 12px;
+  overflow-y: auto;
+  border-radius: 6px;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+
+/* 작성 완료 버튼 */
+form button[type="submit"] {
+  width: 100%;
+  padding: 12px 0;
+  font-size: 16px;
+  background-color: var(--bochi-pink-deep);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+form button[type="submit"]:hover {
+  background-color: var(--bochi-pink);
+}
+
+
+.format-toolbar {
+  margin-bottom: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  user-select: none;
+}
+
+.format-toolbar button {
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1.5px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+  min-width: 60px;
+  text-align: center;
+  color: #444;
+}
+
+.format-toolbar button:hover,
+.format-toolbar button:focus {
+  background-color: #4a90e2;
+  border-color: #357bd8;
+  color: white;
+  outline: none;
+  box-shadow: 0 0 6px rgba(53, 123, 216, 0.6);
+}
+
+/* 아이콘 대신 텍스트 강조 스타일 */
+.format-toolbar button b,
+.format-toolbar button u,
+.format-toolbar button s {
+  pointer-events: none; /* 버튼 내 텍스트에 마우스 이벤트 안먹히게 */
+}
+
+/* 줄바꿈 버튼은 텍스트만으로 */
+.format-toolbar button:nth-child(4) {
+  min-width: 40px;
+  font-weight: normal;
+}

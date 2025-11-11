@@ -1,0 +1,27 @@
+.profile-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px;
+}
+
+.profile-img {
+  width: 120px;         /* 프로필 사진 크기 */
+  height: 120px;
+  border-radius: 50%;   /* 동그랗게 */
+  object-fit: cover;    /* 사진이 비율에 맞게 잘리도록 */
+  border: 3px solid #ccc;
+  background-color: #f8f8f8;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.profile-info p {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+}

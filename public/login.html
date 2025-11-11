@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+  <link rel="icon" href="img/favicon.png" type="image/png">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta charset="UTF-8">
   <title>로그인</title>
   <style>
@@ -54,40 +56,9 @@
     <button onclick="login()">로그인</button>
     <p id="message"></p>
   </div>
+  
 
-  <script>
-async function login() {
-  const userID = document.getElementById("userID").value;
-  const password = document.getElementById("password").value;
-  const message = document.getElementById("message");
+  <script src="login.js"></script>
 
-  try {
-    const response = await fetch("http://localhost:3000/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userID, password })
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      localStorage.setItem("accessToken", data.accessToken);
-      localStorage.setItem("refreshToken", data.refreshToken);
-      localStorage.setItem("username", data.username);
-      localStorage.setItem("ID",userID);
-
-      message.style.color = "green";
-      message.textContent = "로그인 성공!";
-      window.location.href = "/";
-    } else {
-      message.style.color = "red";
-      message.textContent = data.message;
-    }
-  } catch (err) {
-    message.style.color = "red";
-    message.textContent = "서버와 연결할 수 없습니다.";
-  }
-}
-</script>
 </body>
 </html>

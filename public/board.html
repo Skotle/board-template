@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2102648357013948"
+     crossorigin="anonymous"></script>
+  <link href="styles/board.css" rel="stylesheet">
+  <link href="styles/top_bar.css" rel="stylesheet">
+  <link rel="icon" href="img/favicon.png" type="image/png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* 페이지 준비 완료 전까지 숨기기 */
+    body {
+      visibility: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-right-auth">
+    <a href="/login.html" id="login">로그인</a> |
+    <a href="/newsign.html" id="newsign">가입</a>
+  </div>
+
+  <!-- 상단 가로 배너 -->
+  <div class="board-gate">
+  <div class="board-gate-content">
+    <img src="img/botjebbi.png" alt="로고" class="board-logo">
+    <h1 id="boardTitle" class="board-title">게시판 이름</h1>
+    <p class="board-subtitle">botjebi archive</p>
+
+    <div class="board-search-area">
+      <input type="text" placeholder="게시판 검색..." class="board-search">
+      <button class="board-search-btn">검색</button>
+    </div>
+  </div>
+</div>
+
+  <div class="top-bar">
+    <div class="leftbox">
+      <a href="/">  홈</a>
+      <a href="boards.html">보드</a>
+      <a href="social.html">소셜</a>
+      <a href="add-board">추가</a>
+    </div>
+    <div class="logbox">
+      <span id="welcome" class="welcome-text" style="display:none;"></span>
+      <button id="logoutBtn" class="auth-btn" style="display:none;">로그아웃</button>
+      <button id="profileBtn" class="btn-ao" style="display: none;">프로필</button>
+    </div>
+  </div>
+  <div class="log-bar"></div>
+     <a href="#" id="write-btn">글 작성</a>
+  </div>
+
+  <div id="boardCoverContainer" style="margin-bottom: 20px; text-align: center;">
+    <img id="boardCover" src="" alt="게시판 대문" style="max-width: 100%; display: none; border-radius: 8px;">
+  </div>
+
+
+  <div id="categoryButtons" style="margin-bottom:20px;"></div>
+  <div id="category-buttons">
+    <button class="category-button" data-category="all">전체</button>
+  </div>
+  <div id="admin-category-add-container"></div>
+
+  <div id="categoryControls" style="display:none;">
+    <input type="text" id="newCategoryName" placeholder="새 카테고리 이름" />
+  </div>
+
+  <ul id="postList"></ul>
+
+  <div id="pagination">
+    <a id="prevPageLink" href="#">처음</a>
+    <span id="pageInfo"></span>
+    <a id="nextPageLink" href="#">끝으로</a>
+  </div>
+
+  <!-- <script src="board/category.js"></script> -->
+  <script src="logboard.js"></script>
+  <script type="module" src="board/main.js"></script>
+</body>
+</html>

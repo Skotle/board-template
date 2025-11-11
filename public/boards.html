@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>메인</title>
+  <link rel="icon" href="img/favicon.png" type="image/png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link href="styles/index.css" rel="stylesheet">
+  <link href="styles/top_bar.css" rel="stylesheet">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2102648357013948"
+     crossorigin="anonymous"></script>
+  </style>
+</head>
+<body>
+  <div class="top-right-auth">
+    <a href="/login.html" id="login">로그인</a> |
+    <a href="/newsign.html" id="newsign">가입</a>
+  </div>
+
+  <!-- 상단 가로 배너 -->
+  <div class="header-banner">
+    <div class="banner-left">
+      <img src="img/botjebbi.png" alt="로고" class="banner-logo">
+      <div class="banner-text">
+        <h2>irisen25.com</h2>
+        <p>botjebi archive</p>
+      </div>
+    </div>
+
+    <div class="banner-right">
+      <input type="text" placeholder="게시판 검색..." class="banner-search">
+      <button class="search-btn">검색</button>
+    </div>
+  </div>
+  <div class="top-bar">
+    <div class="leftbox">
+      <a href="/">  홈</a>
+      <a href="boards.html">보드</a>
+      <a href="social.html">소셜</a>
+      <a href="add-board">추가</a>
+    </div>
+    <div class="logbox">
+      <span id="welcome" class="welcome-text" style="display:none;"></span>
+      <button id="logoutBtn" class="auth-btn" style="display:none;">로그아웃</button>
+      <button id="profileBtn" class="btn-ao" style="display: none;">프로필</button>
+    </div>
+  </div>
+  <div class="log-bar"></div>
+  <ul class="board-list" id="boardList">
+    <!-- 게시판 목록 위에 정렬 버튼 추가 -->
+<div id="boardSortButtons" style="margin: 10px 0;">
+  <button id="sortByNameBtn">이름순 정렬</button>
+  <button id="sortByCountBtn">게시글 많은 순</button>
+  <button id="sortByVisitedBtn">최근 방문 순</button>
+</div>
+
+    <!-- 게시판 목록이 여기에 삽입됩니다 -->
+     
+  </ul>
+  <div id="addBoardArea" style="margin-top: 20px; display:none;">
+  <input type="text" id="newBoardName" placeholder="새 게시판 이름 입력" />
+  <input type="text" id="newBoardId" placeholder="새 게시판 아이디 입력" />
+  <button id="addBoardBtn">게시판 추가</button>
+</div>
+
+  <script src="index.js"></script>
+  <script src="logboard.js"></script>
+
+</body>
+</html>

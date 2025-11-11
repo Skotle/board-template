@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="board-admin">
+  <h1 class="admin-title">게시판 관리</h1>
+  <p class="admin-subtitle">이곳에서 게시판 설정 및 관리를 할 수 있습니다.</p>
+
+  <!-- 기본 정보 -->
+  <section class="admin-section">
+    <h2>게시판 기본 정보</h2>
+    <label>게시판 이름 <input type="text" id="boardName" value="botjebi archive"></label>
+    <label>게시판 설명 <input type="text" id="boardDesc" value="보찌비 기록 보관소"></label>
+    <button class="admin-btn">저장</button>
+  </section>
+
+  <!-- 카테고리 관리 -->
+  <section class="admin-section">
+    <h2>카테고리 관리</h2>
+    <ul id="categoryList">
+      <li>공지사항 <button class="small-btn">삭제</button></li>
+      <li>자유게시판 <button class="small-btn">삭제</button></li>
+    </ul>
+    <input type="text" id="newCategory" placeholder="새 카테고리 입력">
+    <button class="admin-btn">추가</button>
+  </section>
+
+  <!-- 게시글 관리 -->
+  <section class="admin-section">
+    <h2>게시글 관리</h2>
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>번호</th>
+          <th>제목</th>
+          <th>작성자</th>
+          <th>관리</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>12</td>
+          <td>공지: 운영 규칙 안내</td>
+          <td>관리자</td>
+          <td>
+            <button class="small-btn">삭제</button>
+            <button class="small-btn">고정</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+</div>
+
+</body>
+</html>
